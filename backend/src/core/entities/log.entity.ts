@@ -1,9 +1,9 @@
 export type TLogAction = 
   | "LOGIN"
   | "PAGE_ACCESS"
+  | "DATA_VIEW"
   | "DATA_CREATE"
   | "DATA_EDIT"
-  | "DATA_VIEW"
   | "DATA_DELETE"
   | "LOGOUT";
 

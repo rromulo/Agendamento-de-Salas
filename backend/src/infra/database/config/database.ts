@@ -1,15 +1,16 @@
-import { Sequelize } from 'sequelize';
+import 'dotenv/config'
+import { Options } from 'sequelize';
 
-const sequelize = new Sequelize(
-  'db_scheduling',
-  'root',
-  'root',
+const config: Options =
   {
-    host: 'localhost',
+    username: 'root',
+    password: 'root',
+    database: 'db_scheduling',
+    host: 'db',
     dialect: 'mysql',
     port: 3306,
-    logging: false
+    logging: false,
+    timezone: '-03:00',
   }
-);
 
-export default sequelize;
+export = config;

@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  backend:
+    build: 
+      context: './backend'
+    container_name: scheduling_backend
+    ports:
+      - 3000:3000
+    environment:
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=db_scheduling
+      - DB_HOST=db
+      - JWT_SECRET=109fdj9198foidkhlk
+    volumes:
+      - ./backend:/app-backend
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  mysql_data:

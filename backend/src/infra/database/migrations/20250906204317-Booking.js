@@ -9,8 +9,8 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      roomId: {
-        type: Sequelize.STRING,
+      room_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Rooms',
@@ -19,11 +19,11 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      userId: {
-        type: Sequelize.STRING,
+      user_id: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Rooms',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -33,11 +33,11 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false,
       },
-      startTime:{
+      start_time:{
         type: Sequelize.TIME,
         allowNull: false,
       },
-      endTime:{
+      end_time:{
         type: Sequelize.TIME,
         allowNull: false,
       },
@@ -46,11 +46,11 @@ module.exports = {
         allowNull: false,
         defaultValue: 'PENDING',
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

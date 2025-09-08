@@ -21,7 +21,7 @@ BookingModel.init({
     primaryKey: true,
   },
   roomId: {
-    type: sequelize.STRING,
+    type: sequelize.UUID,
     allowNull: false,
     references: {
       model: 'Rooms',
@@ -31,10 +31,10 @@ BookingModel.init({
     onDelete: 'CASCADE'
   },
   userId: {
-    type: sequelize.STRING,
+    type: sequelize.UUID,
     allowNull: false,
     references: {
-      model: 'Rooms',
+      model: 'Users',
       key: 'id'
     },
     onUpdate: 'CASCADE',

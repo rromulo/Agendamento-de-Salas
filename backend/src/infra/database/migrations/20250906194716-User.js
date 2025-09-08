@@ -28,30 +28,20 @@ module.exports = {
         allowNull: false,
         defaultValue: 'CLIENTE',
       },
-      isActive: {
+      is_active: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,
       },
-      isScheduling: {
+      can_scheduling: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,
       },
-      isViewlogs: {
+      can_view_logs: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,
-      },
-      bookingId: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        references: {
-          model: 'Bookings',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
       },
     })
   },

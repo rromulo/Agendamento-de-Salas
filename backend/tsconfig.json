@@ -14,11 +14,13 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@repositories/*": ["core/epositories/*"],
-      "@services/*": ["core/services/*"],
-      "@entities/*": ["core/entities/*"]
+      "@core/*": ["./src/core/*"],
+      "@infra/*": ["./src/infra/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@cases/*": ["./src/use-cases/*"]
     }
   },
   "include": ["src/**/*"],

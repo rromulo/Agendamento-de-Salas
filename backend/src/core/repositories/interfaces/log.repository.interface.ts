@@ -1,4 +1,4 @@
-import { Log } from '@entities/log.entity';
+import { Log } from '@core/entities/log.entity';
 
 export interface ILogRepository {
   save(log: Log): Promise<Log>;

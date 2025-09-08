@@ -45,25 +45,15 @@ UserModel.init({
     allowNull: false,
     defaultValue: true,
   },
-  isScheduling: {
+  canScheduling: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
   },
-  isViewlogs: {
+  canViewLogs: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
-  },
-  bookingId: {
-    type: sequelize.STRING,
-    allowNull: false,
-    references: {
-      model: 'Bookings',
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
   },
 }, {
   sequelize: db,

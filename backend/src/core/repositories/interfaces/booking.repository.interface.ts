@@ -1,4 +1,4 @@
-import { Booking } from '@entities/booking.entity';
+import { Booking } from '@core/entities/booking.entity';
 
 export interface IBookingRepository {
   indById(id: string): Promise<Booking | null>;

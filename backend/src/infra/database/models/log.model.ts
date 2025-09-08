@@ -7,7 +7,7 @@ class LogModel extends Model {
   declare action: string;
   declare description: string;
   declare uuserId: string;
-  
+
   declare  readonly createdAt: Date;
 }
 
@@ -25,7 +25,7 @@ LogModel.init({
     type: sequelize.TEXT
   },
   userId: {
-    type: sequelize.STRING,
+    type: sequelize.UUID,
     allowNull: false,
     references: {
       model: 'Rooms',

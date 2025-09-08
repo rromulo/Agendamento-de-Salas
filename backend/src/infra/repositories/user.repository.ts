@@ -1,17 +1,25 @@
-import { ICreateUser, IUserProps, User } from '@entities/user.entity';
-import { IUserRepository } from 'core/repositories/interfaces/user.repository.interface';
-import UserModel from 'infra/models/user.model';
+import { ICreateUser, IUserProps, User } from "@core/entities/user.entity";
+import { IUserRepository } from '@core/repositories/interfaces/user.repository.interface'
+import UserModel from '@infra/database/models/user.model';
 
 export class UserRepository implements IUserRepository {
-  findByEmail(email: string): Promise<User | null> {
-    throw new Error('Method not implemented.');
-  }
-  findAll(): Promise<User[]> {
-    throw new Error('Method not implemented.');
-  }
+
   async save(user: ICreateUser): Promise<Partial<IUserProps>> {
     const response = await UserModel.create({...user})
     return new User(response.toJSON()).getPublicProfile();
+  }
+
+  async findAll(): Promise<Partial<IUserProps>[]> {
+    console.log('CHAMOU FIND ALL')
+    const data = await UserModel.findAll({
+      attributes: {exclude: ['password']}
+    });
+    console.log(data)
+    return data
+  }
+
+  findByEmail(email: string): Promise<User | null> {
+    throw new Error('Method not implemented.');
   }
 
   async update(id: string, dataUser: Partial<IUserProps>): Promise<Partial<IUserProps>> {
@@ -38,6 +46,6 @@ export class UserRepository implements IUserRepository {
 
   async getAll(): Promise<User[]> {
     const users = await UserModel.findAll();
-    return users.map((u) => new User(u.toJSON()));
+    return users.map((u: any) => new User(u.toJSON()));
   }
 }

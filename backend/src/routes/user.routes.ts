@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { UserController } from 'core/controllers/user.controller';
-import { UserUseCase } from 'use-cases/user/user.use-case';
-import { UserRepository } from 'infra/repositories/user.repository';
+import { UserController } from '@core/controllers/user.controller'
+import { UserUseCase } from '@cases/user/user.use-case';
+import { UserRepository } from '@infra/repositories/user.repository';
 
 const userRepository = new UserRepository();
 const userUseCase = new UserUseCase(userRepository);

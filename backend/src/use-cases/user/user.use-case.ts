@@ -1,6 +1,6 @@
-import { ICreateUser, IUserProps, User } from '@entities/user.entity';
-import { IUserRepository } from 'core/repositories/interfaces/user.repository.interface';
-import resp from 'utils/resp';
+import { ICreateUser, IUserProps, User } from '@core/entities/user.entity';
+import { IUserRepository } from '@core/repositories/interfaces/user.repository.interface';
+import resp from '@utils/resp';
 
 
 export class UserUseCase {

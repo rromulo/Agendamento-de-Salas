@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserUseCase } from 'use-cases/user/user.use-case';
-import { User } from '@entities/user.entity';
+import { UserUseCase } from '@cases/user/user.use-case';
+// import { User } from '@entities/user.entity';
 
 
 export class UserController {
@@ -18,7 +18,7 @@ export class UserController {
   async getAllUsers(_req: Request, res: Response) {
     try {
       const { status, message } = await this.userUseCase.getUsers();
-      res.status(status).json()
+      res.status(status).json(message)
     } catch (error: any) {
       res.status(400).json({error: error.message})      
     }

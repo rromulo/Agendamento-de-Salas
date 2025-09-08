@@ -19,15 +19,15 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      openTime:{
-        type: sequelize.TIME,
+      open_time:{
+        type: Sequelize.TIME,
         allowNull: false,
       },
-      closeTime:{
-        type: sequelize.TIME,
+      close_time:{
+        type: Sequelize.TIME,
         allowNull: false,
       },
-      isActive: {
+      is_active: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,

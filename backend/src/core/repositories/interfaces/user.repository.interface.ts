@@ -1,0 +1,10 @@
+import { ICreateUser, IUserProps, User } from '@entities/user.entity';
+
+export interface IUserRepository {
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  save(user: ICreateUser): Promise<Partial<IUserProps>>;
+  update(id: string, dataUser: Partial<IUserProps>): Promise<Partial<IUserProps>>;
+  delete(id: string): Promise<boolean>;
+  findAll(): Promise<User[]>;
+}

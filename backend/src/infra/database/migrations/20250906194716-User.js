@@ -33,12 +33,12 @@ module.exports = {
         allowNull: false,
         defaultValue: true,
       },
-      isSchedulingActive: {
+      isScheduling: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,
       },
-      isLogsActive: {
+      isViewlogs: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,

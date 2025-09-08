@@ -45,12 +45,12 @@ UserModel.init({
     allowNull: false,
     defaultValue: true,
   },
-  isSchedulingActive: {
+  isScheduling: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
   },
-  isLogsActive: {
+  isViewlogs: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,

@@ -10,13 +10,7 @@ export class UserUseCase {
   ){}
 
   async saveUser(userData: ICreateUser): Promise<{status: number, message: unknown}> {
-    const existingUser = await this.userRepository.findByEmail(userData.email)
-    if(existingUser) {
-      throw new Error('User already exists')
-    }
-
     const savedUser = await this.userRepository.save(userData);
-    
     return resp(201, savedUser);
   }
 

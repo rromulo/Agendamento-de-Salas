@@ -72,7 +72,7 @@ export class User {
       throw new Error('Password must be at least 8 characters long')
     }
 
-    if(!['admin', 'cliente'].includes(role)) throw new Error("Invalid role")
+    if(!['ADMIN', 'CLIENTE'].includes(role)) throw new Error("Invalid role")
   }
 
   getPublicProfile(): Omit<IUserProps, "password"> {

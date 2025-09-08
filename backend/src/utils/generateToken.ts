@@ -10,7 +10,7 @@ const generateToken = (object: any) => {
   }
 
   const token = jwt.sign({data: {...object }}, secret, config)
-  return token
+  return {token}
 }
 
 export default generateToken;

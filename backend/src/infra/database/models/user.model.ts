@@ -11,8 +11,8 @@ class UserModel extends Model {
   declare password: string;
   declare role: 'ADMIN' | 'CLIENTE'
   declare isActive: boolean;
-  declare isSchedulingActive: boolean;
-  declare isLogsActive: boolean;
+  declare canScheduling: boolean;
+  declare canViewLogs: boolean;
 }
 
 UserModel.init({
@@ -44,16 +44,19 @@ UserModel.init({
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
+    field: 'is_active'
   },
   canScheduling: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
+    field: 'can_scheduling'
   },
   canViewLogs: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     defaultValue: true,
+    field: 'can_view_logs'
   },
 }, {
   sequelize: db,

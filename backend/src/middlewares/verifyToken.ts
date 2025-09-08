@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import ApiError from '@utils/apiError';
 
-export default interface IJWTPayload {
+export interface IJWTPayload {
   id: string;
   email: string
   name: string;
@@ -19,7 +19,7 @@ export default class JsonWebToken {
   }
 
   public verifyToken(authorization: string): IJWTPayload {
-    if(!authorization) throw new ApiError(401, 'Token not found.');
+    if(!authorization) throw new ApiError(401, 'Unauthorized.');
     try {
       this._authorization = authorization
       

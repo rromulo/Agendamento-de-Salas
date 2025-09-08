@@ -2,15 +2,20 @@ import { ICreateUser, IUserProps, User } from "@core/entities/user.entity";
 import { IUserRepository } from '@core/repositories/interfaces/user.repository.interface'
 import UserModel from '@infra/database/models/user.model';
 import ApiError from '@utils/apiError';
+import md5 from 'md5';
 import schemas from 'src/validations/schemas';
 
 export class UserRepository implements IUserRepository {
 
   async save(user: ICreateUser): Promise<Partial<IUserProps>> {
+    
     const { error } = schemas.user.validate(user)
     if (error) throw new ApiError(422, error.message)
-      
-    const response = await UserModel.create({...user})
+
+    const hasshPassword = md5(user.password);
+    const response = await UserModel.create({...user, password: hasshPassword})
+    console.log('USER --> ', response)
+
     return new User(response.toJSON()).getPublicProfile();
   }
 
@@ -23,8 +28,12 @@ export class UserRepository implements IUserRepository {
     return data
   }
 
-  findByEmail(email: string): Promise<User | null> {
-    throw new Error('Method not implemented.');
+  async findByEmail(email: string): Promise<Partial<IUserProps> | null> {
+    const user = await UserModel.findOne({
+      where: { email }
+    });
+    if (!user) throw new ApiError(404, 'Usuário ou senha inválidos.');
+    return user
   }
 
   async update(id: string, dataUser: Partial<IUserProps>): Promise<Partial<IUserProps>> {
@@ -43,6 +52,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
+    console.log('ENTROU NO FINDBYPK')
     const data = await UserModel.findByPk(id);
     if (!data) return null;
 

@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { AuthRepository } from '@infra/repositories/auth.repository';
-import { AuthUseCase } from '@cases/user/auth.use-case';
+import { AuthUseCase } from '@cases/auth/auth.use-case';
 import { AuthController } from '@core/controllers/auth.controller';
 
 const authRouter = Router();

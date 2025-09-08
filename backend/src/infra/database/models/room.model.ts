@@ -6,9 +6,10 @@ import BookingModel from './booking.model';
 class RoomModel extends Model {
   declare id: string;
   declare name: string;
+  declare description?: string;
   declare openTime: string;
   declare closeTime: string;
-  declare isActive: boolean;
+  declare scheduleBlock: string[]
 }
 
 RoomModel.init({
@@ -23,19 +24,25 @@ RoomModel.init({
     allowNull: false,
     unique: true,
   },
+  description: {
+    type: sequelize.TEXT,
+    allowNull: true,
+  },
   openTime:{
     type: sequelize.TIME,
     allowNull: false,
+    field: 'open_time'
   },
   closeTime:{
     type: sequelize.TIME,
     allowNull: false,
+    field: 'close_time'
   },
-  isActive: {
-    type: sequelize.BOOLEAN,
+  scheduleBlock:{
+    type: sequelize.JSON,
     allowNull: false,
-    defaultValue: true,
-  },
+    field: 'schedule_block'
+  }
 },{
   sequelize: db,
   tableName: 'Rooms',
@@ -50,7 +57,7 @@ RoomModel.hasMany(BookingModel, {
 })
 BookingModel.belongsTo(RoomModel, {
   foreignKey: 'roomId',
-  as: 'user'
+  as: 'room'
 })
 
 export default RoomModel;

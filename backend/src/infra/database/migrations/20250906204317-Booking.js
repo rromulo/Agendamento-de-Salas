@@ -42,17 +42,19 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('PENDING', 'CONFIRMED', 'REJECTED', 'CANCELLED'),
+        type: Sequelize.ENUM('pendente', 'confirmado', 'recusado'),
         allowNull: false,
-        defaultValue: 'PENDING',
+        defaultValue: 'pendente',
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
       }
     });
   },

@@ -27,11 +27,10 @@ module.exports = {
         type: Sequelize.TIME,
         allowNull: false,
       },
-      is_active: {
-        type: Sequelize.BOOLEAN,
+      schedule_block:{
+        type: Sequelize.JSON,
         allowNull: false,
-        defaultValue: true,
-      },
+      }
     });
 
   },

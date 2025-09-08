@@ -1,16 +1,20 @@
 import { Model } from 'sequelize';
 import db from '.';
 import sequelize from 'sequelize';
+import { IBookingProps, ICreateBooking, TBookingStatus } from '@core/entities/booking.entity';
 
 
-class BookingModel extends Model {
+class BookingModel extends Model<IBookingProps, ICreateBooking> {
   declare id: string;
   declare roomId: string;
   declare userId: string;
   declare date: Date;
   declare startTime: string;
   declare endTime: string;
-  declare status: string;
+  declare status: TBookingStatus;
+
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 BookingModel.init({
@@ -53,23 +57,15 @@ BookingModel.init({
     allowNull: false,
   },
   status: {
-    type: sequelize.ENUM('PENDENTE', 'CONFIRMADO', 'RECUSADO'),
+    type: sequelize.ENUM('pendente', 'confirmado', 'recusado'),
     allowNull: false,
-    defaultValue: 'PENDENTE',
+    defaultValue: 'pendente',
   },
-  createdAt: {
-    allowNull: false,
-    type: sequelize.DATE
-  },
-  updatedAt: {
-    allowNull: false,
-    type: sequelize.DATE
-  }
 },{
   sequelize: db,
   tableName: 'Bookings',
   modelName: 'Booking',
-  timestamps: false,
+  timestamps: true,
   underscored: true
 })
 

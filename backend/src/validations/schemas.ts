@@ -11,4 +11,21 @@ const user = joi.object({
   canViewLogs: joi.boolean().required(),
 })
 
-export = { user };
+const room = joi.object({
+  name: joi.string().required(),
+  description: joi.optional(),
+  openTime: joi.string().pattern(/^\d{2}:\d{2}(:\d{2})?$/).required(),
+  closeTime: joi.string().pattern(/^\d{2}:\d{2}(:\d{2})?$/).required(),
+  scheduleBlock: joi.array().items(joi.string()).required(),
+})
+
+const booking = joi.object({
+  roomId: joi.string().required(),
+  userId: joi.string().required(),
+  date: joi.date().required(),
+  startTime: joi.string().required(),
+  endTime: joi.string().required(),
+  status: joi.string().valid('pendente').required(),
+})
+
+export = { user, room, booking };

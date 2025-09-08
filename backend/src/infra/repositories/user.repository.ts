@@ -1,10 +1,15 @@
 import { ICreateUser, IUserProps, User } from "@core/entities/user.entity";
 import { IUserRepository } from '@core/repositories/interfaces/user.repository.interface'
 import UserModel from '@infra/database/models/user.model';
+import ApiError from '@utils/apiError';
+import schemas from 'src/validations/schemas';
 
 export class UserRepository implements IUserRepository {
 
   async save(user: ICreateUser): Promise<Partial<IUserProps>> {
+    const { error } = schemas.user.validate(user)
+    if (error) throw new ApiError(422, error.message)
+      
     const response = await UserModel.create({...user})
     return new User(response.toJSON()).getPublicProfile();
   }

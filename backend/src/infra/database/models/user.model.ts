@@ -1,18 +1,21 @@
-import { Model } from 'sequelize';
+import { CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import db from '.';
 import sequelize from 'sequelize';
 import BookingModel from './booking.model';
 import LogModel from './log.model';
 
-class UserModel extends Model {
-  declare id: string;
-  declare name:string;
+class UserModel extends Model<
+  InferAttributes<UserModel>,
+  InferCreationAttributes<UserModel>
+> {
+  declare id: CreationOptional<string>;
+  declare name: string;
   declare email: string;
   declare password: string;
-  declare role: 'ADMIN' | 'CLIENTE'
-  declare isActive: boolean;
-  declare canScheduling: boolean;
-  declare canViewLogs: boolean;
+  declare role: 'ADMIN' | 'CLIENTE';
+  declare isActive: CreationOptional<boolean>;
+  declare canScheduling: CreationOptional<boolean>;
+  declare canViewLogs: CreationOptional<boolean>; 
 }
 
 UserModel.init({

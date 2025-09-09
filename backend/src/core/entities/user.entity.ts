@@ -1,3 +1,5 @@
+import ApiError from '@utils/apiError';
+
 export interface IAddress {
   cep: string;
   estado: string;
@@ -24,8 +26,8 @@ export interface IUserProps {
   password: string;
   role: TuserRole;
   isActive: boolean;
-  isScheduling: boolean;
-  isViewLogs: boolean;
+  canScheduling: boolean;
+  canViewLogs: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -45,13 +47,16 @@ export class User {
       password: this.props.password,
       role: this.props.role,
       isActive: this.props.isActive,
-      isScheduling: this.props.isScheduling,
-      isViewLogs: this.props.isViewLogs
+      isScheduling: this.props.canScheduling,
+      isViewLogs: this.props.canViewLogs
     }
   }
 
   isAdmin(): boolean {
-    return this.props.role === "ADMIN";
+    const verifyAdmin = this.props.role === "ADMIN"
+    console.log('verifyAdmin --<', verifyAdmin)
+    if(!verifyAdmin) throw new ApiError(404, 'Not Found');
+    return true
   }
 
   canEditProfile(): boolean {

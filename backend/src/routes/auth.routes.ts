@@ -9,6 +9,6 @@ const authRepository = new AuthRepository();
 const authUseCase = new AuthUseCase(authRepository);
 const authController = new AuthController(authUseCase);
 
-authRouter.post('/login', (req: Request, res: Response, next: NextFunction) => authController.login.bind(authController)(req, res, next))
+authRouter.post('/login', authController.login.bind(authController))
 
 export default authRouter;

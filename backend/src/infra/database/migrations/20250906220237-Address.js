@@ -11,7 +11,7 @@ module.exports = {
         primaryKey: true
       },
       cep: {
-        type: Sequelize.STRING(9),
+        type: Sequelize.STRING(10),
         allowNull: false,
       },
       estado: {
@@ -48,6 +48,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+      }
     });
   },
 

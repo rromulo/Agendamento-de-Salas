@@ -20,7 +20,6 @@ export class RoomRepository implements IRoomRepository {
   async findAll(): Promise<IRoomProps[]> {
     console.log('CHAMOU FIND ALL')
     const data = await RoomModel.findAll();
-    console.log(data)
     return data
   };
 

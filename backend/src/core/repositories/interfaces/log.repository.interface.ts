@@ -1,7 +1,7 @@
-import { Log } from '@core/entities/log.entity';
+import { ICreateLog, ILogProps } from '@core/entities/log.entity';
 
 export interface ILogRepository {
-  save(log: Log): Promise<Log>;
-  findByUserId(userId: string, page: number, limit: number): Promise<{ logs: Log[], total: number }>;
-  findAll(page: number, limit: number): Promise<{ logs: Log[], total: number }>;
+  saveLog(log: ICreateLog): Promise<ILogProps>;
+  findAll(page: number, limit: number): Promise<{ logs: ILogProps[], totalItems: number, totalPages: number, currentPage: number }>;
+  findByUser(userId: string, page: number, limit: number): Promise<{ logs: ILogProps[], totalItems: number, totalPages: number, currentPage: number }>;
 }

@@ -1,11 +1,7 @@
-import { IUserRepository } from '@core/repositories/interfaces/user.repository.interface'
 import md5 from 'md5';
-import { UserRepository } from './user.repository';
 import UserModel from '@infra/database/models/user.model';
 import ApiError from '@utils/apiError';
 import generateToken from '@utils/generateToken';
-import { IJWTPayload } from 'src/middlewares/verifyToken';
-import resp from '@utils/resp';
 import { IAuthRepository } from '@core/repositories/interfaces/auth.repository.interface';
 
 
@@ -21,7 +17,7 @@ export class AuthRepository implements IAuthRepository {
       }
     })
 
-    if(!user) throw new ApiError(404, 'Usuário não encontrado.');
+    if(!user) throw new ApiError(404, 'Usuário ou senha inválidos.');
     
     const token = generateToken({
       id: user.id,

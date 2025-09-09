@@ -43,15 +43,35 @@ export class BookingRepository implements IBookingRepository {
       include: [
         {
           model: UserModel,
-          attributes: ['id', 'name', 'role'],
-          where: {
-            role: 'cliente'
-          },
+          attributes: ['name', 'role'],
           as: 'user'
         },
         {
           model: RoomModel,
-          attributes: ['id', 'name'],
+          attributes: ['name'],
+          as: 'room'
+        }
+      ],
+      attributes: {
+        exclude: ['roomId', 'userId']
+      },
+      order: [['createdAt', 'DESC']]
+      
+    })
+  }
+  async findAllByUserId(userId: string): Promise<Partial<IBookingProps[]>> {
+    console.log('USER ID REPOSITORY', userId)
+    return await BookingModel.findAll({
+      where: { userId },
+      include: [
+        {
+          model: UserModel,
+          attributes: ['name', 'role'],
+          as: 'user'
+        },
+        {
+          model: RoomModel,
+          attributes: ['name'],
           as: 'room'
         }
       ],
@@ -60,9 +80,6 @@ export class BookingRepository implements IBookingRepository {
       }
       
     })
-  }
-  findByUserId(userId: string): Promise<Partial<IBookingProps>[]> {
-    throw new Error('Method not implemented.');
   }
   update(booking: Partial<IBookingProps>): Promise<Partial<IBookingProps>> {
     throw new Error('Method not implemented.');

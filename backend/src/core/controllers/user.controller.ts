@@ -8,7 +8,8 @@ export class UserController {
   constructor(private readonly userUseCase: UserUseCase) {}
 
   async saveUser(req: Request, res: Response, next: NextFunction) {
-    const { status, message } = await this.userUseCase.saveUser(req.body);
+    const {address, ...userData} = req.body
+    const { status, message } = await this.userUseCase.saveUser(userData, address);
     res.status(status).json(message)
   }
 

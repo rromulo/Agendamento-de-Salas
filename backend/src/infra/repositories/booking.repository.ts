@@ -7,11 +7,14 @@ import { UserRepository } from './user.repository';
 import { RoomRepository } from './room.repository';
 import UserModel from '@infra/database/models/user.model';
 import RoomModel from '@infra/database/models/room.model';
+import LogModel from '@infra/database/models/log.model';
+import { LogRepository } from './log.repository';
 
 export class BookingRepository implements IBookingRepository {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly roomRepository: RoomRepository
+    private readonly roomRepository: RoomRepository,
+    private readonly logRepository: LogRepository
   ) {}
   async save(booking: ICreateBooking): Promise<Partial<IBookingProps>> {
     const { error } = schemas.booking.validate(booking);
@@ -35,6 +38,8 @@ export class BookingRepository implements IBookingRepository {
     if(verifyBooking) throw new ApiError(409, `Já existe um agendamento entre as horas ${booking.startTime} e ${booking.endTime}`);
 
     const response = await BookingModel.create(booking)
+    console.log('ANTES DO LOG NO SAVE BOOKING')
+    await this.logRepository.saveLog({userId: booking.userId, action: 'Criação de agendamento', description: 'Agendamento'})
     return new Booking(response.toJSON()).getPublicBooking();
 
   }

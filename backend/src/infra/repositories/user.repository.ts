@@ -6,12 +6,14 @@ import UserModel from '@infra/database/models/user.model';
 import ApiError from '@utils/apiError';
 import sequelize from '@infra/database/models'
 import { InferAttributes } from 'sequelize';
+import md5 from 'md5';
 
 export class UserRepository implements IUserRepository {
 
   async save(userData: ICreateUser, addresData: ICreateAddress): Promise<UserModel & { address: AddressModel }> {
     return await sequelize.transaction(async (t) => {
-      const user = await UserModel.create(userData, { transaction: t });
+      const hashPassword = md5(userData.password)
+      const user = await UserModel.create({...userData, password: hashPassword}, { transaction: t });
   
       const address = await AddressModel.create(
         { ...addresData, userId: user.id },

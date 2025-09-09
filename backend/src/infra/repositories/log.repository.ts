@@ -4,14 +4,53 @@ import { ILogRepository } from '@core/repositories/interfaces/log.repository.int
 
 export class LogRepository implements ILogRepository {
   async saveLog(log: ICreateLog): Promise<ILogProps> {
+    console.log('LOG SAVELOG ->', log)
     const logResponse =  await LogModel.create(log)
     return logResponse.toJSON() as ILogProps;
   }
-  findAll(page: number, limit: number): Promise<{ logs: ILogProps[]; totalItems: number; totalPages: number; currentPage: number; }> {
-    throw new Error('Method not implemented.');
+  async findAll(page: number, limit: number = 20): Promise<{
+    logs: ILogProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+    const offset = (page - 1) * limit;
+    
+    const { count, rows } = await LogModel.findAndCountAll({
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']]
+    })
+    console.log('ROWS -->', rows);
+    
+    return {
+      logs: rows.map(row => row.toJSON() as ILogProps),
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    }
   }
-  findByUser(userId: string, page: number, limit: number): Promise<{ logs: ILogProps[]; totalItems: number; totalPages: number; currentPage: number; }> {
-    throw new Error('Method not implemented.');
+  async findByUser(userId: string, page: number, limit: number): Promise<{
+    logs: ILogProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+    const offset = (page - 1) * limit;
+    
+    const { count, rows } = await LogModel.findAndCountAll({
+      where: { userId },
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']]
+    })
+
+    return {
+      logs: rows,
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    }
   }
 
 }

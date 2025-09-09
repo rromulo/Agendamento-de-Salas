@@ -3,6 +3,7 @@ import UserModel from '@infra/database/models/user.model';
 import ApiError from '@utils/apiError';
 import generateToken from '@utils/generateToken';
 import { IAuthRepository } from '@core/repositories/interfaces/auth.repository.interface';
+import LogModel from '@infra/database/models/log.model';
 
 
 export class AuthRepository implements IAuthRepository {
@@ -25,7 +26,7 @@ export class AuthRepository implements IAuthRepository {
       name: user.name,
       role: user.role
     })
-
+    const log = await LogModel.create({userId: user.id, action: 'Novo usuário', description: 'Cadastro de usuário'})
     return token
   }
   logout(): Promise<void> {

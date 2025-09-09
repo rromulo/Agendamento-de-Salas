@@ -1,7 +1,6 @@
 import { CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import db from '.';
 import sequelize from 'sequelize';
-import { TLogAction } from '@core/entities/log.entity';
 
 class LogModel extends Model<
   InferAttributes<LogModel>,
@@ -9,7 +8,7 @@ class LogModel extends Model<
 > { 
   declare id: CreationOptional<string>;
   declare userId: string;
-  declare action: TLogAction;
+  declare action: string;
   declare description: string;
   declare createdAt: CreationOptional<Date>;
 }
@@ -31,7 +30,7 @@ LogModel.init({
     type: sequelize.UUID,
     allowNull: false,
     references: {
-      model: 'Rooms',
+      model: 'Users',
       key: 'id'
     },
     onUpdate: 'CASCADE',

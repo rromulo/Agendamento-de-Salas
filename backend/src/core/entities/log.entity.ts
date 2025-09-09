@@ -1,16 +1,6 @@
-export type TLogAction = 
-  | "LOGIN"
-  | "PAGE_ACCESS"
-  | "DATA_VIEW"
-  | "DATA_CREATE"
-  | "DATA_EDIT"
-  | "DATA_DELETE"
-  | "LOGOUT";
-
-
 export interface ICreateLog {
   userId: string;
-  action: TLogAction;
+  action: string;
   description: string;
 }
 export interface ILogProps extends ICreateLog {

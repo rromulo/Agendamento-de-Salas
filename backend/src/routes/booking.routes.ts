@@ -6,12 +6,14 @@ import { UserRepository } from '@infra/repositories/user.repository';
 import { RoomRepository } from '@infra/repositories/room.repository';
 import { verifyToken } from 'src/middlewares/verifyToken';
 import { authorizeAdmin } from 'src/middlewares/authorizeAdmin';
+import { LogRepository } from '@infra/repositories/log.repository';
 
 const bookingRouter = Router();
 
 const userRepository = new UserRepository();
 const roomRepository = new RoomRepository();
-const bookingRepository = new BookingRepository(userRepository, roomRepository);
+const logRepository = new LogRepository()
+const bookingRepository = new BookingRepository(userRepository, roomRepository, logRepository);
 const bookingUseCase = new BookingUseCase(bookingRepository);
 const bookingController = new BookingController(bookingUseCase);
 

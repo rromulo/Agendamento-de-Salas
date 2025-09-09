@@ -1,11 +1,14 @@
-import { Model } from 'sequelize';
+import { CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import db from '.';
 import sequelize from 'sequelize';
 import { IBookingProps, ICreateBooking, TBookingStatus } from '@core/entities/booking.entity';
 
 
-class BookingModel extends Model<IBookingProps, ICreateBooking> {
-  declare id: string;
+class BookingModel extends Model<
+  InferAttributes<BookingModel, { omit: 'createdAt' | 'updatedAt' }>, 
+  InferCreationAttributes<BookingModel, {omit: 'id' | 'createdAt' | 'updatedAt' }>
+> {
+  declare id: CreationOptional<string>;
   declare roomId: string;
   declare userId: string;
   declare date: Date;
@@ -13,8 +16,8 @@ class BookingModel extends Model<IBookingProps, ICreateBooking> {
   declare endTime: string;
   declare status: TBookingStatus;
 
-  declare readonly createdAt: Date;
-  declare readonly updatedAt: Date;
+  declare readonly createdAt: CreationOptional<Date>;
+  declare readonly updatedAt: CreationOptional<Date>;
 }
 
 BookingModel.init({

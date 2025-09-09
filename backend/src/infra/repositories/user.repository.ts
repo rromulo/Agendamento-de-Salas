@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository {
   async save(userData: ICreateUser, addresData: ICreateAddress): Promise<UserModel & { address: AddressModel }> {
     return await sequelize.transaction(async (t) => {
       const hashPassword = md5(userData.password)
-      const user = await UserModel.create({...userData, password: hashPassword}, { transaction: t });
+      const user = await UserModel.create({...userData, password: hashPassword, role: 'CLIENTE'}, { transaction: t });
   
       const address = await AddressModel.create(
         { ...addresData, userId: user.id },
@@ -25,7 +25,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async findAll(): Promise<Partial<IUserProps>[]> {
-    console.log('CHAMOU FIND ALL USERS')
     const data = await UserModel.findAll({
       attributes: {exclude: ['password']},
       include: [
@@ -65,7 +64,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    console.log('ENTROU NO FINDBYPK')
     const data = await UserModel.findByPk(id);
     if (!data) return null;
 

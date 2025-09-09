@@ -13,5 +13,11 @@ export class LogController {
     const {page, limit} = req.body
     const { status, message } = await this.logUseCase.findAll(page, limit);
     res.status(status).json(message)
-}
+  }
+
+  async findAllByUserControl(req: Request, res: Response, next: NextFunction) {
+    const {page, limit} = req.body
+    const { status, message } = await this.logUseCase.findAll(page, limit);
+    res.status(status).json(message)
+  }
 }

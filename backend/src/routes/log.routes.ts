@@ -11,5 +11,6 @@ const logController = new LogController(logUseCase);
 
 logRouter.post('/log', logController.saveLogControl.bind(logController))
 logRouter.get('/admin/log', logController.findAllControl.bind(logController))
+logRouter.get('/log', logController.findAllByUserControl.bind(logController))
 
 export default logRouter;

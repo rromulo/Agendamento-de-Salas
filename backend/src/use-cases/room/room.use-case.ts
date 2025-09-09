@@ -6,7 +6,6 @@ export class RoomUseCase {
   constructor (private readonly roomRepository: IRoomRepository) {}
 
   async saveRoom(room: ICreateRoom): Promise<{ status: number; message: unknown; }> {
-    console.log('ROOM USE CASE ->', room)
     const response = await this.roomRepository.save(room)
     return resp(201, response)
   }

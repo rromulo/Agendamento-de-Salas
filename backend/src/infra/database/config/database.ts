@@ -10,7 +10,9 @@ const config: Options =
     dialect: 'mysql',
     port: 3306,
     logging: false,
-    timezone: '-03:00',
+    dialectOptions:{
+      timezone: 'Z',
+    }
   }
 
 export = config;

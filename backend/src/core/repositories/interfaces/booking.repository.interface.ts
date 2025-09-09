@@ -1,10 +1,12 @@
 import { Booking, IBookingProps, ICreateBooking } from '@core/entities/booking.entity';
+import BookingModel from '@infra/database/models/booking.model';
+import { InferAttributes } from 'sequelize';
 
 export interface IBookingRepository {
-  save(booking: ICreateBooking): Promise<Partial<IBookingProps>>;
+  save(booking: InferAttributes<BookingModel>): Promise<Partial<IBookingProps>>;
   findAll(): Promise<IBookingProps[]>;
   findAllByUserId(userId: string): Promise<Partial<IBookingProps[]>>;
   // findByRoomId(roomId: string): Promise<Booking[]>;
-  update(booking: Partial<IBookingProps>): Promise<Partial<IBookingProps>>;
+  updateBookingStatus(userId: string, bookingId: string, status: string): Promise<Partial<IBookingProps>>
   delete(id: string): Promise<boolean>;
 }

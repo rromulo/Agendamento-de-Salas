@@ -4,9 +4,11 @@ import ApiError from '@utils/apiError';
 import generateToken from '@utils/generateToken';
 import { IAuthRepository } from '@core/repositories/interfaces/auth.repository.interface';
 import LogModel from '@infra/database/models/log.model';
+import { ILogRepository } from '@core/repositories/interfaces/log.repository.interface';
 
 
 export class AuthRepository implements IAuthRepository {
+  constructor(private readonly logRepository: ILogRepository){}
 
   async login(email: string, password: string): Promise<{token: string}> {
     const hashPassword = md5(password)
@@ -26,7 +28,7 @@ export class AuthRepository implements IAuthRepository {
       name: user.name,
       role: user.role
     })
-    const log = await LogModel.create({userId: user.id, action: 'Novo usuário', description: 'Cadastro de usuário'})
+    await this.logRepository.saveLog({userId: user.id, action: 'Login', description: 'Minha Conta'})
     return token
   }
   logout(): Promise<void> {

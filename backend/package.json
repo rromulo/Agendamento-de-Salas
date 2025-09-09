@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts"
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
+    "db:seed": "sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "md5": "^2.3.0",
     "mysql2": "^3.14.4",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

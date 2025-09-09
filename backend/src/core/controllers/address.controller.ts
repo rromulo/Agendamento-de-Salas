@@ -11,7 +11,6 @@ export class AddressController {
 
   async getAddresViaCepApi(req: Request, res: Response, next: NextFunction) {
       const { cep } = req.body
-      console.log('CEP CONTROLLER ->', cep)
       const { status, message } = await this.addresshUseCase.getAddressViaCepApi(cep);
       res.status(status).json(message)
   }

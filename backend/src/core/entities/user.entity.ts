@@ -54,7 +54,6 @@ export class User {
 
   isAdmin(): boolean {
     const verifyAdmin = this.props.role === "ADMIN"
-    console.log('verifyAdmin --<', verifyAdmin)
     if(!verifyAdmin) throw new ApiError(404, 'Not Found');
     return true
   }

@@ -9,8 +9,8 @@ export class RoomRepository implements IRoomRepository {
     try {
       const { error } = schemas.room.validate(room);
       if (error) throw new ApiError(422, error.message);
-      
-      const response = await RoomModel.create(room)
+      const response = await RoomModel.create({...room})
+
       return new Room(response.toJSON()).getPublicRoom();
     } catch (error: any) {
       throw new ApiError(500, error.message)
@@ -18,7 +18,6 @@ export class RoomRepository implements IRoomRepository {
   };
 
   async findAll(): Promise<IRoomProps[]> {
-    console.log('CHAMOU FIND ALL')
     const data = await RoomModel.findAll();
     return data
   };

@@ -4,7 +4,6 @@ import { ILogRepository } from '@core/repositories/interfaces/log.repository.int
 
 export class LogRepository implements ILogRepository {
   async saveLog(log: ICreateLog): Promise<ILogProps> {
-    console.log('LOG SAVELOG ->', log)
     const logResponse =  await LogModel.create(log)
     return logResponse.toJSON() as ILogProps;
   }
@@ -21,7 +20,6 @@ export class LogRepository implements ILogRepository {
       offset,
       order: [['createdAt', 'DESC']]
     })
-    console.log('ROWS -->', rows);
     
     return {
       logs: rows.map(row => row.toJSON() as ILogProps),
@@ -30,7 +28,7 @@ export class LogRepository implements ILogRepository {
       currentPage: page
     }
   }
-  async findByUser(userId: string, page: number, limit: number): Promise<{
+  async findAllByUser(userId: string, page: number, limit: number): Promise<{
     logs: ILogProps[];
     totalItems: number;
     totalPages: number;
@@ -46,7 +44,7 @@ export class LogRepository implements ILogRepository {
     })
 
     return {
-      logs: rows,
+      logs: rows.map(row => row.toJSON() as ILogProps),
       totalItems: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page

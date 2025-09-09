@@ -9,6 +9,8 @@ import UserModel from '@infra/database/models/user.model';
 import RoomModel from '@infra/database/models/room.model';
 import LogModel from '@infra/database/models/log.model';
 import { LogRepository } from './log.repository';
+import { InferAttributes, where } from 'sequelize';
+import { getStatusUpdateBooking } from '@utils/getStatusUpdateBooking';
 
 export class BookingRepository implements IBookingRepository {
   constructor(
@@ -16,7 +18,7 @@ export class BookingRepository implements IBookingRepository {
     private readonly roomRepository: RoomRepository,
     private readonly logRepository: LogRepository
   ) {}
-  async save(booking: ICreateBooking): Promise<Partial<IBookingProps>> {
+  async save(booking: InferAttributes<BookingModel>): Promise<Partial<IBookingProps>> {
     const { error } = schemas.booking.validate(booking);
     if(error) throw new ApiError(500, error.message);
 
@@ -38,7 +40,6 @@ export class BookingRepository implements IBookingRepository {
     if(verifyBooking) throw new ApiError(409, `Já existe um agendamento entre as horas ${booking.startTime} e ${booking.endTime}`);
 
     const response = await BookingModel.create(booking)
-    console.log('ANTES DO LOG NO SAVE BOOKING')
     await this.logRepository.saveLog({userId: booking.userId, action: 'Criação de agendamento', description: 'Agendamento'})
     return new Booking(response.toJSON()).getPublicBooking();
 
@@ -65,7 +66,6 @@ export class BookingRepository implements IBookingRepository {
     })
   }
   async findAllByUserId(userId: string): Promise<Partial<IBookingProps[]>> {
-    console.log('USER ID REPOSITORY', userId)
     return await BookingModel.findAll({
       where: { userId },
       include: [
@@ -86,9 +86,29 @@ export class BookingRepository implements IBookingRepository {
       
     })
   }
-  update(booking: Partial<IBookingProps>): Promise<Partial<IBookingProps>> {
-    throw new Error('Method not implemented.');
+  async updateBookingStatus(userId: string, bookingId: string, status: 'pendente' | 'confirmado' | 'recusado'): Promise<Partial<IBookingProps>> {
+    try {
+      
+      const bookingExists = await BookingModel.findByPk(bookingId)
+      if(!bookingExists) throw new ApiError(404, 'Agendamento não encontrado.');
+      
+      const bookingStatus = getStatusUpdateBooking(status);
+      
+      bookingExists.status = status;
+      await bookingExists.save();
+      
+      await this.logRepository.saveLog({
+        userId: userId,
+        action: bookingStatus.action,
+        description: bookingStatus.description
+      });
+      
+      return new Booking(bookingExists.toJSON()).getPublicBooking();
+    } catch (error: any) {
+      throw new ApiError(500, error.message)
+    }
   }
+
   delete(id: string): Promise<boolean> {
     throw new Error('Method not implemented.');
   }

@@ -20,7 +20,9 @@
       "@infra/*": ["./src/infra/*"],
       "@routes/*": ["./src/routes/*"],
       "@utils/*": ["./src/utils/*"],
-      "@cases/*": ["./src/use-cases/*"]
+      "@cases/*": ["./src/use-cases/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@validations/*": ["./src/validations/*"]
     },
     
   },

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc",
-    "start": "node -r tsconfig-paths/register dist/server.js",
+    "start": "node bootstrap.js",
     "db:migrate": "npx sequelize db:migrate --sequelizerc .sequelizerc",
     "db:migrate:prod": "npx sequelize db:migrate --sequelizerc .sequelizerc.prod",
     "db:seed": "sequelize-cli db:seed:all",
@@ -32,7 +32,6 @@
     "md5": "^2.3.0",
     "mysql2": "^3.14.4",
     "sequelize": "^6.37.7",
-    "tsconfig-paths": "^4.2.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
@@ -42,6 +41,7 @@
     "nodemon": "^3.1.10",
     "sequelize-cli": "^6.6.3",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }

@@ -2,7 +2,7 @@ import { Booking, IBookingProps, ICreateBooking } from '@core/entities/booking.e
 import { IBookingRepository } from '@core/repositories/interfaces/booking.repository.interface';
 import BookingModel from '@infra/database/models/booking.model';
 import ApiError from '@utils/apiError';
-import schemas from 'src/validations/schemas';
+import schemas from '@validations/schemas';
 import { UserRepository } from './user.repository';
 import { RoomRepository } from './room.repository';
 import UserModel from '@infra/database/models/user.model';

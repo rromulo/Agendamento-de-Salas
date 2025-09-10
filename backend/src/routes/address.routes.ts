@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { AddressRepository } from '@infra/repositories/address.repository';
 import { AddressUseCase } from '@cases/address/address.use-case';
 import { AddressController } from '@core/controllers/address.controller';
-import { verifyToken } from 'src/middlewares/verifyToken';
+import { verifyToken } from '@middlewares/verifyToken';
 
 const addressRouter = Router();
 

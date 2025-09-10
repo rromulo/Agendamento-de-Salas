@@ -4,8 +4,12 @@ WORKDIR ./app-backend
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --production
 
 COPY . .
 
-CMD ["sh", "-c", "npx tsc && npx sequelize db:create && npx sequelize db:migrate && npm run db:seed && npm run dev"]
+RUN npm run build
+
+EXPOSE 3001
+
+CMD ["node", "dist/server.js"]

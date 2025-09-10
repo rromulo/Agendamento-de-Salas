@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app-backend
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+COPY start.sh /app-backend/start.sh
+
+RUN chmod 755 /app-backend/start.sh
+
+CMD ["/app-backend/start.sh"]

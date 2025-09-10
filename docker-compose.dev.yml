@@ -4,7 +4,7 @@ services:
   backend:
     build: 
       context: './backend'
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: scheduling_backend
     ports:
       - 3001:3001

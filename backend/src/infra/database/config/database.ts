@@ -6,16 +6,12 @@ const config: Options =
     username: process.env.DB_USER     || 'root',
     password: process.env.DB_PASS     || 'root',
     database: process.env.DB_NAME     || 'db_scheduling',
-    host: process.env.DB_HOST         || 'db',
+    host: process.env.DB_HOST,
     dialect: 'mysql',
     port: Number(process.env.DB_PORT) || 3306,
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    logging: false,
     dialectOptions:{
       timezone: '-03:00', 
-      ssl: process.env.NODE_ENV === 'production' ? {
-        require: true,
-        rejectUnauthorized: false,
-      } : undefined
     }
   }
 

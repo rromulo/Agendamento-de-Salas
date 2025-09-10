@@ -2,8 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { RoomRepository } from '@infra/repositories/room.repository';
 import { RoomUseCase } from '@cases/room/room.use-case';
 import { RoomController } from '@core/controllers/room.controller';
-import { verifyToken } from 'src/middlewares/verifyToken';
-import { authorizeAdmin } from 'src/middlewares/authorizeAdmin';
+import { verifyToken } from '@middlewares/verifyToken';
+import { authorizeAdmin } from '@middlewares/authorizeAdmin';
 
 const roomRouter = Router();
 

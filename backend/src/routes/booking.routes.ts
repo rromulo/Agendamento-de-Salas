@@ -4,8 +4,8 @@ import { BookingUseCase } from '@cases/boolking/booking.use-case';
 import { BookingController } from '@core/controllers/booking.controller';
 import { UserRepository } from '@infra/repositories/user.repository';
 import { RoomRepository } from '@infra/repositories/room.repository';
-import { verifyToken } from 'src/middlewares/verifyToken';
-import { authorizeAdmin } from 'src/middlewares/authorizeAdmin';
+import { verifyToken } from '@middlewares/verifyToken';
+import { authorizeAdmin } from '@middlewares/authorizeAdmin';
 import { LogRepository } from '@infra/repositories/log.repository';
 
 const bookingRouter = Router();

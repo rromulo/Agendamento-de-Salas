@@ -2,25 +2,47 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "db:migrate": "npx sequelize db:migrate --sequelizerc .sequelizerc",
+    "db:migrate:prod": "npx sequelize db:migrate --sequelizerc .sequelizerc.prod",
+    "db:seed": "sequelize-cli db:seed:all",
+    "docker:build": "docker build -t my-backend -f Dockerfile.prod .",
+    "docker:run": "docker run -p 3001:3001 --env-file .env my-backend",
+    "docker:dev": "docker-compose up --build",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
+    "docker:prod:detach": "docker-compose -f docker-compose.prod.yml up -d --build",
+    "test:local": "NODE_ENV=test npm start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/md5": "^2.3.5",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "sequelize": "^6.37.7"
+    "joi": "^18.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "md5": "^2.3.0",
+    "mysql2": "^3.14.4",
+    "sequelize": "^6.37.7",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.1",
+    "nodemon": "^3.1.10",
     "sequelize-cli": "^6.6.3",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }

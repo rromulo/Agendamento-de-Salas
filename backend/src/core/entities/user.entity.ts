@@ -1,3 +1,5 @@
+import ApiError from '@utils/apiError';
+
 export interface IAddress {
   cep: string;
   estado: string;
@@ -8,36 +10,52 @@ export interface IAddress {
   complemento?: string;
 }
 
-export type TuserRole = "admin" | "customer";
+export interface ICreateUser {
+  name: string;
+  email: string;
+  password: string;
+  role: TuserRole;
+  isActive: boolean;
+  isScheduling: boolean;
+  isViewLogs: boolean;
+}
+export interface IUserProps {
+  id?: string | null;
+  name: string;
+  email: string;
+  password: string;
+  role: TuserRole;
+  isActive: boolean;
+  canScheduling: boolean;
+  canViewLogs: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+export type TuserRole = "ADMIN" | "CLIENTE";
 
 export class User {
-  public id: number | null;
-  public name: string;
-  public email: string;
-  public password: string;
-  public role: TuserRole;
-  public address: IAddress;
-  public createdAt: Date = new Date();
-  public updatedAt: Date = new Date();
 
-  constructor (
-    id: number | null,
-    name: string,
-    email: string,
-    password: string,
-    role: TuserRole = 'customer',
-    address: IAddress
-  ) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.role = role;
-    this.address = address;
+
+  constructor(private props: IUserProps) {
+    this.validate();
+  };
+
+  toPersistence(): Record<string, any> {
+    return {
+      name: this.props.name,
+      email: this.props.email,
+      password: this.props.password,
+      role: this.props.role,
+      isActive: this.props.isActive,
+      isScheduling: this.props.canScheduling,
+      isViewLogs: this.props.canViewLogs
+    }
   }
 
   isAdmin(): boolean {
-    return this.role === "admin";
+    const verifyAdmin = this.props.role === "ADMIN"
+    if(!verifyAdmin) throw new ApiError(404, 'Not Found');
+    return true
   }
 
   canEditProfile(): boolean {
@@ -45,16 +63,24 @@ export class User {
   }
 
   validate(): void {
-    if (!this.email || !this.password || !this.name) {
+    const {name, email, password, role} = this.props
+    if (!email || !password || !name) {
       throw new Error("Missing required fields");
     }
 
-    if(!this.email.includes("@")) {
+    if(!email.includes("@")) {
       throw new Error('Invalid email format');
     }
 
-    if(this.password.length < 8 ) {
+    if(password.length < 8 ) {
       throw new Error('Password must be at least 8 characters long')
     }
+
+    if(!['ADMIN', 'CLIENTE'].includes(role)) throw new Error("Invalid role")
+  }
+
+  getPublicProfile(): Omit<IUserProps, "password"> {
+    const { password, ...rest } = this.props;
+    return rest
   }
 }

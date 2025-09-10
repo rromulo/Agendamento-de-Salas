@@ -1,41 +1,42 @@
-export interface IRoomAmenities {
-  hasProjector?: boolean;
-  hasWhiteboard?: boolean;
-  hasAirConditioning?: boolean;
-  capacity: number;
+export interface ICreateRoom {
+  name: string;
+  description: string;
+  openTime: string;
+  closeTime: string;
+  scheduleBlock: string[];
+}
+
+export interface IRoomProps {
+  id:string;
+  name: string;
+  description?: string;
+  openTime: string;
+  closeTime: string;
+  scheduleBlock: string[];
+  createdAt?: Date;
+  updatedAt?: Date
 }
 
 export class Room {
-  public id: number | null;
-  public name: string;
-  public description: string;
-  public capacity: number;
-  public amenities: IRoomAmenities;
-  public isActive: boolean;
-  public createdAt: Date;
-  public updatedAt: Date;
+  
+  constructor(private room: IRoomProps
+   ) {}
 
-   constructor(
-    id: number | null,
-    name: string,
-    description: string,
-    capacity: number,
-    amenities: IRoomAmenities
-   ) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.capacity = capacity;
-    this.amenities = amenities;
-    this.isActive = true;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
-  }
-
-  validate(): void {
-    if (!this.name || this.capacity <= 0) {
-      throw new Error('Invalid room data');
+  getPublicRoom(): Partial<IRoomProps> {
+    return {
+      id: this.room.id,
+      name: this.room.name,
+      description: this.room.description,
+      openTime: this.room.openTime,
+      closeTime: this.room.closeTime,
+      scheduleBlock: this.room.scheduleBlock
     }
   }
+
+  // validate(): void {
+  //   if (!this.name || this.capacity <= 0) {
+  //     throw new Error('Invalid room data');
+  //   }
+  // }
 
 }

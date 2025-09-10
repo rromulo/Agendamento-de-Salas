@@ -13,7 +13,7 @@ const userRouter = Router();
 
 userRouter.post("/admin/users", verifyToken, authorizeAdmin, userController.saveUser.bind(userController) );
 userRouter.get("/admin/users", userController.getAllUsers.bind(userController));
-userRouter.post("/users", verifyToken, userController.saveUser.bind(userController) );
+userRouter.post("/users", userController.saveUser.bind(userController) );
 userRouter.get("/users", verifyToken, userController.getAllUsers.bind(userController));
 
 export default userRouter

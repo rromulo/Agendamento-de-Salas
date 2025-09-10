@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node -r tsconfig-paths/register dist/server.js",
     "db:migrate": "npx sequelize db:migrate --sequelizerc .sequelizerc",
     "db:migrate:prod": "npx sequelize db:migrate --sequelizerc .sequelizerc.prod",
     "db:seed": "sequelize-cli db:seed:all",

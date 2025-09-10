@@ -3,15 +3,19 @@ import { Options } from 'sequelize';
 
 const config: Options =
   {
-    username: 'root',
-    password: 'root',
-    database: 'db_scheduling',
-    host: 'db',
+    username: process.env.DB_USER     || 'root',
+    password: process.env.DB_PASS     || 'root',
+    database: process.env.DB_NAME     || 'db_scheduling',
+    host: process.env.DB_HOST         || 'db',
     dialect: 'mysql',
-    port: 3306,
-    logging: false,
+    port: Number(process.env.DB_PORT) || 3306,
+    logging: process.env.NODE_ENV === 'development' ? console.log : false,
     dialectOptions:{
-      timezone: 'Z',
+      timezone: '-03:00', 
+      ssl: process.env.NODE_ENV === 'production' ? {
+        require: true,
+        rejectUnauthorized: false,
+      } : undefined
     }
   }
 

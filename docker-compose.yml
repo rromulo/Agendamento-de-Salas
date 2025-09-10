@@ -1,18 +1,15 @@
-version: '3'
+version: '3.8'
 
 services:
   backend:
     build: 
       context: './backend'
+      dockerfile: Dockerfile
     container_name: scheduling_backend
     ports:
-      - 3000:3000
-    environment:
-      - DB_USER=root
-      - DB_PASS=root
-      - DB_NAME=db_scheduling
-      - DB_HOST=db
-      - JWT_SECRET=109fdj9198foidkhlk
+      - 3001:3001
+    env_file:
+      - .env
     volumes:
       - ./backend:/app-backend
     depends_on:

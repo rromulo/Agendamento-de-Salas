@@ -21,7 +21,8 @@
       "@routes/*": ["./src/routes/*"],
       "@utils/*": ["./src/utils/*"],
       "@cases/*": ["./src/use-cases/*"]
-    }
+    },
+    
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],

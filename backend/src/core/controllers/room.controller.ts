@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { RoomUseCase } from '@cases/room/room.use-case';
+import { RoomUseCase } from '../../use-cases/room/room.use-case';
 
 export class RoomController {
   constructor(private readonly roomUseCase: RoomUseCase) {}

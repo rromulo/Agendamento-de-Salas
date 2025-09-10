@@ -1,6 +1,6 @@
-import LogModel from '@infra/database/models/log.model';
-import { ICreateLog, ILogProps } from '@core/entities/log.entity';
-import { ILogRepository } from '@core/repositories/interfaces/log.repository.interface';
+import LogModel from '../../infra/database/models/log.model';
+import { ICreateLog, ILogProps } from '../../core/entities/log.entity';
+import { ILogRepository } from '../../core/repositories/interfaces/log.repository.interface';
 
 export class LogRepository implements ILogRepository {
   async saveLog(log: ICreateLog): Promise<ILogProps> {

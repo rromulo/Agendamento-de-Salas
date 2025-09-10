@@ -1,16 +1,16 @@
-import { Booking, IBookingProps, ICreateBooking } from '@core/entities/booking.entity';
-import { IBookingRepository } from '@core/repositories/interfaces/booking.repository.interface';
-import BookingModel from '@infra/database/models/booking.model';
-import ApiError from '@utils/apiError';
-import schemas from '@validations/schemas';
+import { Booking, IBookingProps, ICreateBooking } from '../../core/entities/booking.entity';
+import { IBookingRepository } from '../../core/repositories/interfaces/booking.repository.interface';
+import BookingModel from '../../infra/database/models/booking.model';
+import ApiError from '../../utils/apiError';
+import schemas from '../../validations/schemas';
 import { UserRepository } from './user.repository';
 import { RoomRepository } from './room.repository';
-import UserModel from '@infra/database/models/user.model';
-import RoomModel from '@infra/database/models/room.model';
-import LogModel from '@infra/database/models/log.model';
+import UserModel from '../../infra/database/models/user.model';
+import RoomModel from '../../infra/database/models/room.model';
+import LogModel from '../../infra/database/models/log.model';
 import { LogRepository } from './log.repository';
 import { InferAttributes, where } from 'sequelize';
-import { getStatusUpdateBooking } from '@utils/getStatusUpdateBooking';
+import { getStatusUpdateBooking } from '../../utils/getStatusUpdateBooking';
 
 export class BookingRepository implements IBookingRepository {
   constructor(

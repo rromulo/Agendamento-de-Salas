@@ -1,8 +1,8 @@
-import { Address, IAddressProps, ICreateAddress } from '@core/entities/address.entity';
-import { IAddressRepository } from '@core/repositories/interfaces/address.repository.interface';
-import AddressModel from '@infra/database/models/address.model';
-import UserModel from '@infra/database/models/user.model';
-import ApiError from '@utils/apiError';
+import { Address, IAddressProps, ICreateAddress } from '../../core/entities/address.entity';
+import { IAddressRepository } from '../../core/repositories/interfaces/address.repository.interface';
+import AddressModel from '../../infra/database/models/address.model';
+import UserModel from '../../infra/database/models/user.model';
+import ApiError from '../../utils/apiError';
 import axios from 'axios';
 
 

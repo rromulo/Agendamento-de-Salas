@@ -1,10 +1,10 @@
 import md5 from 'md5';
-import UserModel from '@infra/database/models/user.model';
-import ApiError from '@utils/apiError';
-import generateToken from '@utils/generateToken';
-import { IAuthRepository } from '@core/repositories/interfaces/auth.repository.interface';
-import LogModel from '@infra/database/models/log.model';
-import { ILogRepository } from '@core/repositories/interfaces/log.repository.interface';
+import UserModel from '../../infra/database/models/user.model';
+import ApiError from '../../utils/apiError';
+import generateToken from '../../utils/generateToken';
+import { IAuthRepository } from '../../core/repositories/interfaces/auth.repository.interface';
+import LogModel from '../../infra/database/models/log.model';
+import { ILogRepository } from '../../core/repositories/interfaces/log.repository.interface';
 
 
 export class AuthRepository implements IAuthRepository {

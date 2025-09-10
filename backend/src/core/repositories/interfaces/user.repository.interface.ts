@@ -1,7 +1,7 @@
-import { ICreateAddress } from '@core/entities/address.entity';
-import { ICreateUser, IUserProps, User } from '@core/entities/user.entity';
-import AddressModel from '@infra/database/models/address.model';
-import UserModel from '@infra/database/models/user.model';
+import { ICreateAddress } from '../../../core/entities/address.entity';
+import { ICreateUser, IUserProps, User } from '../../../core/entities/user.entity';
+import AddressModel from '../../../infra/database/models/address.model';
+import UserModel from '../../../infra/database/models/user.model';
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;

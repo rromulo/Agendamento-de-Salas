@@ -1,7 +1,7 @@
 import { CreationOptional, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import db from '.';
 import sequelize from 'sequelize';
-import { IBookingProps, ICreateBooking, TBookingStatus } from '@core/entities/booking.entity';
+import { TBookingStatus } from '../../../core/entities/booking.entity';
 
 
 class BookingModel extends Model<

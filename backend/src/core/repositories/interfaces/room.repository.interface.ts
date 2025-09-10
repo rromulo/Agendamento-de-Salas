@@ -1,4 +1,4 @@
-import { IRoomProps } from '@core/entities/room.entity';
+import { IRoomProps } from '../../../core/entities/room.entity';
 
 export interface IRoomRepository {
   findById(id: string): Promise<Partial<IRoomProps>>;

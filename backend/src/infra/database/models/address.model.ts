@@ -2,7 +2,6 @@ import { CreationOptional, InferAttributes, InferCreationAttributes, Model } fro
 import db from '.';
 import sequelize from 'sequelize';
 import UserModel from './user.model';
-import { IAddressProps, ICreateAddress } from '@core/entities/address.entity';
 
 
 class AddressModel extends Model<

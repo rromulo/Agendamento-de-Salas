@@ -1,5 +1,5 @@
-import { IAuthRepository } from '@core/repositories/interfaces/auth.repository.interface';
-import resp from '@utils/resp';
+import { IAuthRepository } from '../../core/repositories/interfaces/auth.repository.interface';
+import resp from '../../utils/resp';
 
 export class AuthUseCase {
   constructor(private readonly authRepository: IAuthRepository) {}

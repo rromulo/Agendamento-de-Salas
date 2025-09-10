@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { LogRepository } from '@infra/repositories/log.repository';
-import { LogUseCase } from '@cases/log/log.use-case';
-import { LogController } from '@core/controllers/log.controller';
+import { LogRepository } from '../infra/repositories/log.repository';
+import { LogUseCase } from '../use-cases/log/log.use-case';
+import { LogController } from '../core/controllers/log.controller';
 
 const logRouter = Router();
 

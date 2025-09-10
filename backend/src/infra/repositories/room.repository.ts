@@ -1,8 +1,8 @@
-import { IRoomRepository } from '@core/repositories/interfaces/room.repository.interface';
-import { ICreateRoom, IRoomProps, Room } from '@core/entities/room.entity';
-import RoomModel from '@infra/database/models/room.model';
-import ApiError from '@utils/apiError';
-import schemas from '@validations/schemas';
+import { IRoomRepository } from '../../core/repositories/interfaces/room.repository.interface';
+import { ICreateRoom, IRoomProps, Room } from '../../core/entities/room.entity';
+import RoomModel from '../../infra/database/models/room.model';
+import ApiError from '../../utils/apiError';
+import schemas from '../../validations/schemas';
 
 export class RoomRepository implements IRoomRepository {
   async save(room: Partial<IRoomProps>): Promise<Partial<IRoomProps>> {

@@ -1,4 +1,4 @@
-import ApiError from '@utils/apiError';
+import ApiError from '../../utils/apiError';
 
 export interface IAddress {
   cep: string;

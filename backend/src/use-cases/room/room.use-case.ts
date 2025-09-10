@@ -1,6 +1,6 @@
-import { ICreateRoom, IRoomProps } from '@core/entities/room.entity';
-import { IRoomRepository } from '@core/repositories/interfaces/room.repository.interface';
-import resp from '@utils/resp';
+import { ICreateRoom, IRoomProps } from '../../core/entities/room.entity';
+import { IRoomRepository } from '../../core/repositories/interfaces/room.repository.interface';
+import resp from '../../utils/resp';
 
 export class RoomUseCase {
   constructor (private readonly roomRepository: IRoomRepository) {}

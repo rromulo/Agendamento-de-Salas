@@ -1,10 +1,10 @@
-import { ICreateAddress } from '@core/entities/address.entity';
-import { ICreateUser, IUserProps, User } from "@core/entities/user.entity";
-import { IUserRepository } from '@core/repositories/interfaces/user.repository.interface'
-import AddressModel from '@infra/database/models/address.model';
-import UserModel from '@infra/database/models/user.model';
-import ApiError from '@utils/apiError';
-import sequelize from '@infra/database/models'
+import { ICreateAddress } from '../../core/entities/address.entity';
+import { ICreateUser, IUserProps, User } from "../../core/entities/user.entity";
+import { IUserRepository } from '../../core/repositories/interfaces/user.repository.interface'
+import AddressModel from '../../infra/database/models/address.model';
+import UserModel from '../../infra/database/models/user.model';
+import ApiError from '../../utils/apiError';
+import sequelize from '../../infra/database/models'
 import { InferAttributes } from 'sequelize';
 import md5 from 'md5';
 

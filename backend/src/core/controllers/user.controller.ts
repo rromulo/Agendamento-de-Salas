@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserUseCase } from '@cases/user/user.use-case';
-import ApiError from '@utils/apiError';
+import { UserUseCase } from '../../use-cases/user/user.use-case';
 // import { User } from '@entities/user.entity';
 
 

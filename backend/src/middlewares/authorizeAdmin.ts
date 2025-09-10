@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { User } from '@core/entities/user.entity';
-import ApiError from '@utils/apiError';
+import { User } from '../core/entities/user.entity';
+import ApiError from '../utils/apiError';
 
 export const authorizeAdmin = (req: Request, res: Response, next: NextFunction): void => {
   try {

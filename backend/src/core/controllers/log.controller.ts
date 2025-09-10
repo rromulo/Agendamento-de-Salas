@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { LogUseCase } from '@cases/log/log.use-case';
+import { LogUseCase } from '../../use-cases/log/log.use-case';
 
 export class LogController {
   constructor(private readonly logUseCase: LogUseCase) {}

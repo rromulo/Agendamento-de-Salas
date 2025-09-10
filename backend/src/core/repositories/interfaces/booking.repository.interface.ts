@@ -1,5 +1,5 @@
-import { Booking, IBookingProps, ICreateBooking } from '@core/entities/booking.entity';
-import BookingModel from '@infra/database/models/booking.model';
+import { Booking, IBookingProps, ICreateBooking } from '../../../core/entities/booking.entity';
+import BookingModel from '../../../infra/database/models/booking.model';
 import { InferAttributes } from 'sequelize';
 
 export interface IBookingRepository {

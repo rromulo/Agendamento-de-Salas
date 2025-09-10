@@ -1,4 +1,4 @@
-import { ICreateLog, ILogProps } from '@core/entities/log.entity';
+import { ICreateLog, ILogProps } from '../../../core/entities/log.entity';
 
 export interface ILogRepository {
   saveLog(log: ICreateLog): Promise<ILogProps>;

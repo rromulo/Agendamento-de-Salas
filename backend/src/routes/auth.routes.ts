@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { AuthRepository } from '@infra/repositories/auth.repository';
-import { AuthUseCase } from '@cases/auth/auth.use-case';
-import { AuthController } from '@core/controllers/auth.controller';
-import { LogRepository } from '@infra/repositories/log.repository';
+import { AuthRepository } from '../infra/repositories/auth.repository';
+import { AuthUseCase } from '../use-cases/auth/auth.use-case';
+import { AuthController } from '../core/controllers/auth.controller';
+import { LogRepository } from '../infra/repositories/log.repository';
 
 const authRouter = Router();
 

@@ -1,9 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { UserController } from '@core/controllers/user.controller'
-import { UserUseCase } from '@cases/user/user.use-case';
-import { UserRepository } from '@infra/repositories/user.repository';
-import { verifyToken } from '@middlewares/verifyToken';
-import { authorizeAdmin } from '@middlewares/authorizeAdmin';
+import { UserController } from '../core/controllers/user.controller'
+import { UserUseCase } from '../use-cases/user/user.use-case';
+import { UserRepository } from '../infra/repositories/user.repository';
+import { verifyToken } from '../middlewares/verifyToken';
+import { authorizeAdmin } from '../middlewares/authorizeAdmin';
 
 const userRepository = new UserRepository();
 const userUseCase = new UserUseCase(userRepository);

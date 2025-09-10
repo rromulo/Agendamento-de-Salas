@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AddressUseCase } from '@cases/address/address.use-case';
+import { AddressUseCase } from '../../use-cases/address/address.use-case';
 
 export class AddressController {
   constructor(private readonly addresshUseCase: AddressUseCase) {}

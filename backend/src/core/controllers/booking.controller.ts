@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { BookingUseCase } from '@cases/boolking/booking.use-case';
+import { BookingUseCase } from '../../use-cases/boolking/booking.use-case';
 
 
 export class BookingController {

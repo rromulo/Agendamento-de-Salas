@@ -1,6 +1,6 @@
-import { ICreateAddress } from '@core/entities/address.entity';
-import { IAddressRepository } from '@core/repositories/interfaces/address.repository.interface';
-import resp from '@utils/resp';
+import { ICreateAddress } from '../../core/entities/address.entity';
+import { IAddressRepository } from '../../core/repositories/interfaces/address.repository.interface';
+import resp from '../../utils/resp';
 
 export class AddressUseCase {
   constructor(private readonly addressRepository: IAddressRepository) {}

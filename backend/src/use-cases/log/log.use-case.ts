@@ -1,7 +1,7 @@
-import { LogRepository } from '@infra/repositories/log.repository';
-import { ICreateLog } from '@core/entities/log.entity';
-import { ILogRepository } from '@core/repositories/interfaces/log.repository.interface';
-import resp from '@utils/resp';
+import { LogRepository } from '../../infra/repositories/log.repository';
+import { ICreateLog } from '../../core/entities/log.entity';
+import { ILogRepository } from '../../core/repositories/interfaces/log.repository.interface';
+import resp from '../../utils/resp';
 
 export class LogUseCase {
   constructor(private readonly logRepository: ILogRepository) {}

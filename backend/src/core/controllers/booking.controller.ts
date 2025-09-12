@@ -9,8 +9,9 @@ export class BookingController {
     res.status(status).json(message)
   }
 
-  async listAllBookings(_req: Request, res: Response, next: NextFunction) {
-    const {status, message} = await this.bookingUseCase.listAllBookings()
+  async listAllBookings(req: Request, res: Response, next: NextFunction) {
+    const {page, limit} = req.params
+    const {status, message} = await this.bookingUseCase.listAllBookings(+page, +limit)
     res.status(status).json(message)
   }
 

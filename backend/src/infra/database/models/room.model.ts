@@ -2,6 +2,7 @@ import { Model } from 'sequelize';
 import db from '.';
 import sequelize from 'sequelize';
 import BookingModel from './booking.model';
+import LogModel from './log.model';
 
 class RoomModel extends Model {
   declare id: string;

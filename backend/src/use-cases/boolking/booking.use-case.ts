@@ -12,8 +12,8 @@ export class BookingUseCase {
     return resp(201, response)
   }
 
-  async listAllBookings(): Promise<{ status: number, message: unknown }> {
-    const response = await this.bookingRepository.findAll()
+  async listAllBookings(page: number, limit: number): Promise<{ status: number, message: unknown }> {
+    const response = await this.bookingRepository.findAll(page, limit)
     return resp(201, response)
   }
 

@@ -14,4 +14,9 @@ export class RoomUseCase {
     const response = await this.roomRepository.update(id, room);
     return resp(200, response)
   }
+
+  async getAllRooms(): Promise<{status: number, message: unknown}> {
+    const response = await this.roomRepository.findAll();
+    return resp(200, response)
+  }
 }

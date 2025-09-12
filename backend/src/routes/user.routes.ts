@@ -15,5 +15,8 @@ userRouter.post("/admin/users", verifyToken, authorizeAdmin, userController.save
 userRouter.get("/admin/users", userController.getAllUsers.bind(userController));
 userRouter.post("/users", userController.saveUser.bind(userController) );
 userRouter.get("/users", verifyToken, userController.getAllUsers.bind(userController));
+userRouter.patch("/user/canScheduling/:userId", verifyToken, userController.updateUser.bind(userController));
+userRouter.patch("/user/canViewLogs/:userId", verifyToken, userController.updateUser.bind(userController));
+userRouter.patch("/user/isActive/:userId", verifyToken, userController.updateUser.bind(userController));
 
 export default userRouter

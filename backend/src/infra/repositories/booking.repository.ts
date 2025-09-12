@@ -25,6 +25,11 @@ export class BookingRepository implements IBookingRepository {
     const userResponse = await this.userRepository.findById(booking.userId)
     if(!userResponse) throw new ApiError(404, 'Usuário não encontrado.');
 
+    const user = userResponse.getPublicProfile()
+    if(!user.canScheduling && user.role !== 'ADMIN') {
+      throw new ApiError(401, 'Você não tem permissão para fazer agendamentos')
+    }
+
     const roomResponse = await this.roomRepository.findById(booking.roomId)
     if(!roomResponse) throw new ApiError(404, 'Sala não encontrada.');
 
@@ -44,26 +49,41 @@ export class BookingRepository implements IBookingRepository {
     return new Booking(response.toJSON()).getPublicBooking();
 
   }
-  async findAll(): Promise<IBookingProps[]> {
-    return await BookingModel.findAll({
+  async findAll(page: number, limit: number = 20): Promise<{
+    logs: IBookingProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+
+    const offset = (page - 1) * limit;
+    
+    const { count, rows } = await BookingModel.findAndCountAll({
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: UserModel,
-          attributes: ['name', 'role'],
-          as: 'user'
+          as: 'user',
+          attributes: {exclude: ['email', 'password']}
         },
         {
           model: RoomModel,
-          attributes: ['name'],
           as: 'room'
         }
       ],
       attributes: {
         exclude: ['roomId', 'userId']
       },
-      order: [['createdAt', 'DESC']]
-      
     })
+    console.log(count, rows)
+    return {
+      logs: rows.map(row => row.toJSON() as unknown as IBookingProps),
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    }
   }
   async findAllByUserId(userId: string): Promise<Partial<IBookingProps[]>> {
     return await BookingModel.findAll({

@@ -20,18 +20,10 @@ export class UserUseCase {
     return resp(200, response)
   }
 
-  // async updateUser(userId: string, updateData: Partial<User>): Promise<User> {
-  //   const user = await this.userRepository.findById(userId);
-
-  //   if(!user) throw new Error('User not found');
-
-  //   user.validate();
-
-  //   const updatedUser = await this.userRepository.update(updateData);
-
-
-  //   return updatedUser;
-  // }
+  async updateUser(userId: string, updateData: Partial<ICreateUser>): Promise<{status: number, message: unknown}> {
+    const updatedUser = await this.userRepository.update(userId, updateData);
+    return resp(200, updatedUser);
+  }
 
   // async changeUserRole (userId: string, newRole: TuserRole, adminId: string): Promise<User> {
   //   if (!['admin', 'customer'].includes(newRole)) throw new Error('Invalid role');

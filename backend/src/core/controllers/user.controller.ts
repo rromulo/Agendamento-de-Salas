@@ -20,4 +20,10 @@ export class UserController {
       res.status(400).json({error: error.message})      
     }
   }
+  async updateUser(req: Request, res: Response) {
+      const data = req.body
+      const {userId} = req.params
+      const {status, message} = await this.userUseCase.updateUser(userId, data)
+      res.status(status).json(message)
+  }
 }

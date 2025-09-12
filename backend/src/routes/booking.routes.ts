@@ -17,7 +17,7 @@ const bookingRepository = new BookingRepository(userRepository, roomRepository, 
 const bookingUseCase = new BookingUseCase(bookingRepository);
 const bookingController = new BookingController(bookingUseCase);
 
-bookingRouter.get('/admin/bookings', verifyToken, authorizeAdmin, bookingController.listAllBookings.bind(bookingController))
+bookingRouter.get('/admin/bookings/:page/:limit', verifyToken, authorizeAdmin, bookingController.listAllBookings.bind(bookingController))
 bookingRouter.get('/bookings', verifyToken, bookingController.findAllByUserId.bind(bookingController))
 bookingRouter.post('/bookings', verifyToken, bookingController.createBooking.bind(bookingController))
 bookingRouter.patch('/bookings/:userId/:bookingId', verifyToken, bookingController.updateStatus.bind(bookingController))

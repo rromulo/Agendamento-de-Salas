@@ -1,0 +1,132 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { AdjustmentModal } from '../forms/modal-form/ModalAjustes';
+import { IRoomInterface } from '@/interfaces/room.interface';
+import { getAllRooms, updateRoom } from '@/services/room';
+
+interface Column<T> {
+  key: keyof T | string;
+  label: string;
+  render?: (item: T) => React.ReactNode;
+}
+
+interface DataTableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  onFilter?: (value: string) => void;
+  onDateFilter?: (date: string) => void;
+  actions?: (item: T) => React.ReactNode;
+  path?: string;
+  role?: 'ADMIN' | 'CLIENTE'
+}
+
+const handleSaveAdjustments = (data: IRoomInterface) => {
+  console.log('Dados para salvar:', data);
+  updateRoom(data.id, data)
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function DataTable<T extends Record<string, any>>({
+  data,
+  columns,
+  onFilter,
+  onDateFilter,
+  actions,
+  path,
+  role
+}: DataTableProps<T>) {
+  const [dataRooms, setDataRooms] = useState<IRoomInterface[] | []>([])
+  useEffect(() => {
+    const getRooms = async () => {
+      try {
+        console.log('GET ALL ROOMS CHAMADO')
+        const response = await getAllRooms()
+        if (response) {
+          setDataRooms(response)
+        }
+      } catch (error) {
+        console.log('ERRO AO CHAMAR TODAS AS SALAS');
+        return [];
+      }
+    }
+    getRooms()
+  }, [])
+
+  const [search, setSearch] = useState("");
+  return (
+    <div className="p-8 bg-white border-1 border-gray-300 rounded-md">
+      <div className="flex items-center gap-2 mb-4 justify-between">
+        <div className='flex items-center gap-2 w-2/3'>
+            <input
+              type="text"
+              placeholder="Filtre por nome"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                onFilter?.(e.target.value);
+              }}
+              className="border border-gray-300 p-2 rounded-md w-full outline-0"
+            />
+            <input
+              type="date"
+              onChange={(e) => onDateFilter?.(e.target.value)}
+              className="border p-2 rounded-md border-gray-300"
+            />
+        </div>
+        <div>
+          {
+            path === 'agendamentos' && role === 'ADMIN' && (
+
+              <AdjustmentModal
+              onSave={handleSaveAdjustments}
+              dataRoom={dataRooms} roomName={''} initialTime={''} finalTime={''} timeBlock={''}
+              />
+            )
+          }
+        </div>
+      </div>
+
+      {/* Tabela */}
+      <div className='overflow-auto max-h-[791px]'>
+        <table className="w-full border-collapse rounded-md h-[700px] ">
+          <thead>
+            <tr className="border-t border-gray-300">
+              {columns.map((col) => (
+                <th key={col.key as string} className=" py-6 text-left h-[20px]">
+                  {col.label}
+                </th>
+              ))}
+              {actions && <th className=" p-2">Ação</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {data.length === 0 && (
+              <tr>
+                <td colSpan={columns.length + (actions ? 1 : 0)} className="p-4 text-center">
+                  Nenhum registro encontrado
+                </td>
+              </tr>
+            )}
+            {data.map((row, idx) => (
+              <tr key={idx} className="hover:bg-gray-50">
+                {columns.map((col) => (
+                  <td key={col.key as string} className={`border-t border-gray-300 py-6 h-[20px]`}>
+                    {col.render ? col.render(row) : row[col.key]}
+                  </td>
+                ))}
+                {actions && <td className="border-t border-gray-300 p-2">{actions(row)}</td>}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* Paginação (simples de exemplo) */}
+      <div className="flex justify-center mt-4 gap-2">
+        <button className="px-3 py-1 border rounded">1</button>
+        <button className="px-3 py-1 border rounded">2</button>
+        <button className="px-3 py-1 border rounded">3</button>
+      </div>
+    </div>
+  );
+}

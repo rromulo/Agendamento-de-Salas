@@ -13,4 +13,9 @@ export class RoomController {
       const { status, message } = await this.roomUseCase.updateRoom(req.params.id, req.body);
       res.status(status).json(message)
   }
+
+  async getAllRooms(req: Request, res: Response, next: NextFunction) {
+    const {status, message} = await this.roomUseCase.getAllRooms();
+    res.status(status).json(message)
+  }
 }

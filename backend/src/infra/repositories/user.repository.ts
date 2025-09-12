@@ -26,6 +26,7 @@ export class UserRepository implements IUserRepository {
 
   async findAll(): Promise<Partial<IUserProps>[]> {
     const data = await UserModel.findAll({
+      where: {role: 'CLIENTE'},
       attributes: {exclude: ['password']},
       include: [
         {

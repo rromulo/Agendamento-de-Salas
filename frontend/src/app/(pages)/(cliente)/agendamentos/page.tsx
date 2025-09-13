@@ -2,14 +2,12 @@
 import { Pagination } from '@/components/paginate';
 import { DataTable } from '@/components/table/DataTable';
 import { IBooking } from '@/interfaces/booking,interface';
-import { IRoomUpdate } from '@/interfaces/room.interface';
-import { getAllBookings, updateBooking } from '@/services/bookings';
+import { getAllBookings, getBookinsByUser, updateBooking } from '@/services/bookings';
 import { useEffect, useState } from 'react';
 
 export default function AdminAgendamentos() {
 
   const [bookings, setBookings] = useState<IBooking[] | []>([])
-  const [dataPaginate, setDataPaginate] = useState('')
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState("1")
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -17,7 +15,7 @@ export default function AdminAgendamentos() {
   const loadBookings = async (page: string) => {
     try {
       setLoading(true)
-      const bookingsData = await getAllBookings(+page, 20)
+      const bookingsData = await getBookinsByUser(+page, 20)
       setBookings(bookingsData.logs)
       setTotalPages(bookingsData.totalPages)
     } catch (error) {
@@ -27,8 +25,6 @@ export default function AdminAgendamentos() {
     }
   }
 
-
-
   useEffect(() => {
     loadBookings(page)
   }, [])
@@ -36,7 +32,7 @@ export default function AdminAgendamentos() {
     loadBookings(page)
   }, [page])
 
-  const handleStatusBooking = async (userId: string, bookingId: string, status: 'pendente' | 'confirmado' | 'recusado') => {
+  const handleStatusBooking = async (userId: string, bookingId: string, status: 'recusado') => {
     setLoading(true)
     const response = await updateBooking(userId, bookingId, status)
     console.log('RESPONSE HANDLESTATUS ->', response)
@@ -54,9 +50,10 @@ export default function AdminAgendamentos() {
   return (
     <div className=''>
       <DataTable
-
+        refreshData={loadBookings}
+        page={page}
         path='agendamentos'
-        role='ADMIN'
+        role='CLIENTE'
         data={bookings}
         columns={[
           { key: "date", label: "Data agendamento",
@@ -115,16 +112,9 @@ export default function AdminAgendamentos() {
                 <button onClick={() => {handleStatusBooking(row.user.id, row.id, 'recusado')}} className="text-white bg-black rounded-full h-[30px] w-[30px]">X</button>
               </>)
             }
-            {
-              row.status !== 'confirmado' && row.status !== 'recusado' ? (
-
-                <button onClick={() => {handleStatusBooking(row.user.id, row.id, 'confirmado')}} className="text-white bg-black rounded-full h-[30px] w-[30px]">✔</button>
-              ) : (<></>)
-            }
           </div>
         )}
       />
-      
       <Pagination
         pagination={{ currentPage: Number(page), totalPages }}
         handleOnClick={setPage}

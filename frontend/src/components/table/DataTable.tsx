@@ -2,8 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { AdjustmentModal } from '../forms/modal-form/ModalAjustes';
-import { IRoomInterface } from '@/interfaces/room.interface';
+import { IRoomInterface, IRoomUpdate } from '@/interfaces/room.interface';
 import { getAllRooms, updateRoom } from '@/services/room';
+import { ScheduleModal } from '../forms/modal-form/ModalSchedule';
+import { useAuth } from '@/app/context/authContext';
+import { saveBooking, getBookinsByUser } from '@/services/bookings';
+import { ICreateBooking } from '@/interfaces/booking,interface';
 
 interface Column<T> {
   key: keyof T | string;
@@ -18,13 +22,14 @@ interface DataTableProps<T> {
   onDateFilter?: (date: string) => void;
   actions?: (item: T) => React.ReactNode;
   path?: string;
-  role?: 'ADMIN' | 'CLIENTE'
+  role?: 'ADMIN' | 'CLIENTE',
+  refreshData?: (page: string) => Promise<void>;
+  page?: string
 }
 
-const handleSaveAdjustments = (data: IRoomInterface) => {
-  console.log('Dados para salvar:', data);
-  updateRoom(data.id, data)
-};
+const handleUpdateRoom = (dataToUpdate: IRoomUpdate) =>{
+  console.log('handleUpdateRoom -->', {dataToUpdate})
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function DataTable<T extends Record<string, any>>({
@@ -34,24 +39,40 @@ export function DataTable<T extends Record<string, any>>({
   onDateFilter,
   actions,
   path,
-  role
+  role,
+  refreshData,
+  page = '1'
 }: DataTableProps<T>) {
   const [dataRooms, setDataRooms] = useState<IRoomInterface[] | []>([])
-  useEffect(() => {
-    const getRooms = async () => {
-      try {
-        console.log('GET ALL ROOMS CHAMADO')
-        const response = await getAllRooms()
-        if (response) {
-          setDataRooms(response)
-        }
-      } catch (error) {
-        console.log('ERRO AO CHAMAR TODAS AS SALAS');
-        return [];
+  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const {authState: { user }} = useAuth()
+  const getRooms = async () => {
+    try {
+      console.log('GET ALL ROOMS CHAMADO')
+      const response = await getAllRooms()
+      if (response) {
+        setDataRooms(response)
       }
+    } catch (error) {
+      console.log('ERRO AO CHAMAR TODAS AS SALAS');
+      return [];
     }
+  }
+  useEffect(() => {
     getRooms()
   }, [])
+
+  const handleSaveBooking = async (dataSave: {roomId: string, startTime: string, endTime:string, status: string, date: string}) => {
+    await saveBooking(
+      {
+        ...dataSave,
+        userId: user?.id || ''
+      } as unknown as ICreateBooking
+    )
+    if(refreshData) {
+      await refreshData(page)
+    }
+  }
 
   const [search, setSearch] = useState("");
   return (
@@ -70,18 +91,32 @@ export function DataTable<T extends Record<string, any>>({
             />
             <input
               type="date"
-              onChange={(e) => onDateFilter?.(e.target.value)}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
               className="border p-2 rounded-md border-gray-300"
             />
         </div>
         <div>
           {
-            path === 'agendamentos' && role === 'ADMIN' && (
+            (path === 'agendamentos' && role === 'ADMIN') && (
 
               <AdjustmentModal
-              onSave={handleSaveAdjustments}
-              dataRoom={dataRooms} roomName={''} initialTime={''} finalTime={''} timeBlock={''}
+                refreshRooms={getRooms}
+                onSave={handleUpdateRoom}
+                dataRoom={dataRooms}
               />
+            )
+          }
+          {
+            path === 'agendamentos' && role === "CLIENTE" && (
+              <ScheduleModal
+                roomName={''}
+                initialTime={''}
+                finalTime={''}
+                timeBlock={''}
+                onSave={handleSaveBooking}
+                dataRoom={dataRooms}
+                textMainButton={''} />              
             )
           }
         </div>
@@ -122,11 +157,11 @@ export function DataTable<T extends Record<string, any>>({
         </table>
       </div>
       {/* Paginação (simples de exemplo) */}
-      <div className="flex justify-center mt-4 gap-2">
+      {/* <div className="flex justify-center mt-4 gap-2">
         <button className="px-3 py-1 border rounded">1</button>
         <button className="px-3 py-1 border rounded">2</button>
         <button className="px-3 py-1 border rounded">3</button>
-      </div>
+      </div> */}
     </div>
   );
 }

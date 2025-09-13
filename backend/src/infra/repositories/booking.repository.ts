@@ -32,6 +32,10 @@ export class BookingRepository implements IBookingRepository {
 
     const roomResponse = await this.roomRepository.findById(booking.roomId)
     if(!roomResponse) throw new ApiError(404, 'Sala não encontrada.');
+    const existingBooking = await BookingModel.findOne({
+      where: {roomId: roomResponse.id, date: booking.date, startTime: booking.startTime, endTime: booking.endTime}
+    })
+    if(existingBooking) throw new ApiError(409, `Já existe um agendamento para esse horario na sala: ${roomResponse.name}`)
 
     const verifyBooking = await BookingModel.findOne({
       where: {
@@ -85,26 +89,42 @@ export class BookingRepository implements IBookingRepository {
       currentPage: page
     }
   }
-  async findAllByUserId(userId: string): Promise<Partial<IBookingProps[]>> {
-    return await BookingModel.findAll({
+  async findAllByUserId(userId: string, page: number, limit: number = 20): Promise<{
+    logs: IBookingProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+
+    const offset = (page - 1) * limit;
+    
+    const { count, rows } = await BookingModel.findAndCountAll({
       where: { userId },
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: UserModel,
-          attributes: ['name', 'role'],
-          as: 'user'
+          as: 'user',
+          attributes: {exclude: ['email', 'password']}
         },
         {
           model: RoomModel,
-          attributes: ['name'],
           as: 'room'
         }
       ],
       attributes: {
         exclude: ['roomId', 'userId']
-      }
-      
+      },
     })
+    console.log(count, rows)
+    return {
+      logs: rows.map(row => row.toJSON() as unknown as IBookingProps),
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    }
   }
   async updateBookingStatus(userId: string, bookingId: string, status: 'pendente' | 'confirmado' | 'recusado'): Promise<Partial<IBookingProps>> {
     try {

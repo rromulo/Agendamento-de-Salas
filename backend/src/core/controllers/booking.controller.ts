@@ -16,8 +16,8 @@ export class BookingController {
   }
 
   async findAllByUserId(req: Request, res: Response, next: NextFunction) {
-    const userId = res.locals.user.data.id
-    const {status, message} = await this.bookingUseCase.findAllByUserId(userId)
+    const {userId, page, limit} = req.params;
+    const {status, message} = await this.bookingUseCase.findAllByUserId(userId,+page,+limit)
     res.status(status).json(message)
   }
 

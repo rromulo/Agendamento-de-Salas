@@ -11,7 +11,7 @@ const roomRepository = new RoomRepository();
 const roomUseCase = new RoomUseCase(roomRepository);
 const roomController = new RoomController(roomUseCase);
 
-roomRouter.post('/rooms', verifyToken, authorizeAdmin, roomController.saveRoom.bind(roomController))
+roomRouter.post('/admin/rooms', verifyToken, authorizeAdmin, roomController.saveRoom.bind(roomController))
 roomRouter.get('/rooms', verifyToken, roomController.getAllRooms.bind(roomController))
 roomRouter.patch('/admin/rooms/:id', (req: Request, res: Response, next: NextFunction) => roomController.updateRoom.bind(roomController)(req, res, next))
 

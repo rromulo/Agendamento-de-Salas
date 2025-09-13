@@ -1,31 +1,27 @@
 // components/AdjustmentModal.tsx
 'use client';
 
-import { IRoomInterface } from '@/interfaces/room.interface';
+import { IRoomInterface, IRoomUpdate } from '@/interfaces/room.interface';
 import { Modal } from '.';
 import { useModal } from '@/hooks/useModal';
 import { useEffect, useState } from 'react';
 import { mask } from 'remask';
+import ModalCreateRoom from './ModalCreateRoom';
 
 interface AdjustmentModalProps {
-  roomName: string;
-  initialTime: string;
-  finalTime: string;
-  timeBlock: string;
-  onSave: (data: IRoomInterface) => void;
+  onSave: (data: IRoomUpdate) => void;
   dataRoom: IRoomInterface[];
+  refreshRooms: () => void;
 }
 
 export function AdjustmentModal({ 
-  roomName, 
-  initialTime, 
-  finalTime, 
-  timeBlock,
   dataRoom,
-  onSave 
+  onSave,
+  refreshRooms
 }: AdjustmentModalProps) {
   const { isOpen, open, close } = useModal();
   const [room, setRoom] = useState<IRoomInterface | null>(dataRoom[0])
+  const [roomName, setRoomName] = useState<string>('')
   const [scheduleBlockRoom, setScheduleBlockRoom] = useState<string[]>([])
   const [defineScheduleBlock, setDefineScheduleBlock] = useState<string>(scheduleBlockRoom[0])
   const [openCloseTime, setOpenCloseTime] = useState<string>(`${room?.openTime} - ${room?.closeTime}`)
@@ -37,17 +33,15 @@ export function AdjustmentModal({
     if(roomFiltered) {
       setRoom(roomFiltered)
       setScheduleBlockRoom(roomFiltered.scheduleBlock)
-      setOpenCloseTime(`${room?.openTime.slice(0, -3)} - ${room?.closeTime.slice(0, -3)}`)
+      setOpenCloseTime(`${roomFiltered?.openTime.slice(0, -3)} - ${roomFiltered?.closeTime.slice(0, -3)}`)
+      setRoomName(roomFiltered.name)
       console.log('ROOM FILTRADA ->', roomFiltered)
     } else console.log('Não ACHOU SALA')
   }
 
   useEffect(() => {
-    if(dataRoom.length > 0){
-      setRoom(dataRoom[0])
-    }
-    handleRoom(room?.id || '')
-  }, [])
+    handleRoom(dataRoom[0]?.id || '')
+  }, [isOpen])
 
   return (
     <>
@@ -70,8 +64,14 @@ export function AdjustmentModal({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Nome da sala
             </label>
+            {/* <input
+                type="text"
+                defaultValue={roomName}
+                onChange={(e) => {setRoomName(e.target.value)}}
+                className="w-full p-3 border border-gray-300 rounded-md"
+              /> */}
             <select
-              defaultValue={room?.id}
+              defaultValue={dataRoom[0]?.id}
               className="w-full p-3 border border-gray-300 rounded-md"
               onChange={(e) => {handleRoom(e.target.value)}}
             >
@@ -108,30 +108,21 @@ export function AdjustmentModal({
               onChange={(e) => {setDefineScheduleBlock(e.target.value)}}
               className="w-full p-3 border border-gray-300 rounded-md"
             >
-              {
-                scheduleBlockRoom?.map((scheduleTime: string, idx: number) => (
-                  <option value={scheduleTime} key={idx}>{scheduleTime}</option>
-                ))
-              }
+              <option value={scheduleBlockRoom[0]}>{scheduleBlockRoom[0]}</option>
             </select>
           </div>
 
           {/* Botões de ação */}
           <div className="flex flex-col items-start pt-4 border-t border-gray-300">
-            <button className="text-black font-bold">
-              + Adicionar nova sala
-            </button>
+            <ModalCreateRoom refreshRooms={refreshRooms} />
             <div className="space-x-3 w-full mt-5 h-[44px]">
               <button
                 onClick={() => {
                   onSave({
                     id: room?.id || '',
-                    name: room?.name || '',
-                    description: room?.description || '',
-                    scheduleBlock: room?.scheduleBlock || [],
+                    name: roomName,
                     openTime: openCloseTime.split(' - ')[0] || '',
                     closeTime: openCloseTime.split(' - ')[1] || '',
-                    // selectedSchedule: defineScheduleBlock || ""
                   });
                   close();
                 }}

@@ -1,3 +1,5 @@
+import { ICreateAddress } from './address.interface';
+
 export type TuserRole = "ADMIN" | "CLIENTE";
 export interface ICreateUser {
   name: string;
@@ -7,6 +9,7 @@ export interface ICreateUser {
   isActive: boolean;
   canScheduling: boolean;
   canViewLogs: boolean;
+  address: ICreateAddress
 }
 export interface IUserProps {
   id?: string | null;
@@ -22,7 +25,7 @@ export interface IUserProps {
 }
 
 export interface IAddress {
-  id: string;
+  id?: string;
   cep: string;
   estado: string;
   cidade: string;
@@ -30,6 +33,6 @@ export interface IAddress {
   rua: string;
   numero: string;
   complemento?: string;
-  userId: string;
-  createdAt: string
+  userId?: string;
+  createdAt?: string
 }

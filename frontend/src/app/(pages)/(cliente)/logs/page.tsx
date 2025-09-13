@@ -2,7 +2,7 @@
 import { Pagination } from '@/components/paginate';
 import { DataTable } from '@/components/table/DataTable';
 import { ILogProps } from '@/interfaces/log.interface';
-import { getAllLogs } from '@/services/logs';
+import { getAllLogs, getAllLogsByUser } from '@/services/logs';
 import React, { useEffect, useState } from 'react'
 
 function LogsAdmin() {
@@ -14,7 +14,7 @@ function LogsAdmin() {
   const loadLogs = async (page: string) => {
     try {
       setLoading(true)
-      const logsData = await getAllLogs(+page, 20)
+      const logsData = await getAllLogsByUser(+page, 20)
       setLogs(logsData.logs)
       setTotalPages(logsData.totalPages)
     } catch (error) {
@@ -43,16 +43,6 @@ function LogsAdmin() {
       <DataTable
         data={logs}
         columns={[
-          { key: "cliente", label: "Cliente",
-            render: (record: ILogProps) =>{
-              
-              return (
-              <div>
-                <div className="font-medium">{record.user.name}</div>
-                <div className="text-xs font-normal text-gray-500">{record.user.role}</div>
-              </div>
-            )}
-           },
           { key: "atividade", label: "Tipo de atividade",
             render: (record: ILogProps) => (
               <div>

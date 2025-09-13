@@ -7,6 +7,14 @@ export interface IRoomInterface {
   scheduleBlock: string[];
   // selectedSchedule: string;
 }
+
+export interface IRoomUpdate {
+  id: string;
+  name: string;
+  openTime: string;
+  closeTime: string;
+}
+
 export interface ICreateRoom {
   name: string;
   description: string;

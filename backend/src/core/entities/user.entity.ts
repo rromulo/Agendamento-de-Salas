@@ -10,6 +10,18 @@ export interface IAddress {
   complemento?: string;
 }
 
+export interface IUpdateAddress {
+  id: string;
+  cep: string;
+  estado: string;
+  cidade: string;
+  bairro: string;
+  rua: string;
+  numero?: string;
+  complemento?: string;
+  userId: string;
+}
+
 export interface ICreateUser {
   name: string;
   email: string;

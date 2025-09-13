@@ -14,5 +14,6 @@ const authController = new AuthController(authUseCase);
 
 authRouter.post('/login', authController.login.bind(authController))
 authRouter.get('/auth/me', verifyToken, authController.getProfile.bind(authController))
+// authRouter.get('/logout:/userId', verifyToken, authController.logout.bind(authController))
 
 export default authRouter;

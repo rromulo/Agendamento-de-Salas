@@ -62,7 +62,22 @@ export class LogRepository implements ILogRepository {
       where: { userId },
       limit,
       offset,
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
+      include:[
+        {
+          model: UserModel,
+          as: 'user',
+          attributes: {
+            exclude: ['password']
+          },
+          include: [
+            {
+              model: AddressModel,
+              as: 'address'
+            }
+          ]
+        }
+      ]
     })
 
     return {

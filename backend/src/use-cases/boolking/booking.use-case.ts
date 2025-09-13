@@ -17,10 +17,11 @@ export class BookingUseCase {
     return resp(201, response)
   }
 
-  async findAllByUserId(userId: string): Promise<{ status: number, message: unknown }> {
-    const response = await this.bookingRepository.findAllByUserId(userId)
+  async findAllByUserId(userId: string, page: number, limit: number): Promise<{ status: number, message: unknown }> {
+    const response = await this.bookingRepository.findAllByUserId(userId, page, limit)
     return resp(201, response)
   }
+  
 
   async updateBookingStatus(userId: string, bookingId: string, status: 'pendente' | 'confirmado' | 'recusado'): Promise<{ status: number, message: unknown }> {
     const response = await this.bookingRepository.updateBookingStatus(userId, bookingId, status)

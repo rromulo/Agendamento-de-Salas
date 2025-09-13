@@ -9,13 +9,17 @@ import {
   IAllowedRoute,
   IAuthState,
 } from '../../hooks/useAuth'; // Importe as interfaces do seu arquivo useAuth.ts
+import { toastError } from '@/utils/toastify';
+import { saveLog } from '@/services/logs';
+import { ICreateLog } from '@/interfaces/log.interface';
 
 // Criação do Contexto de Autenticação
 const AuthContext = createContext<
   | {
       authState: IAuthState;
       login: (data: ILoginData) => Promise<void>;
-      logout: () => void;
+      logout: (dataLog: ICreateLog) => void;
+      userData: () => Promise<void>
     }
   | undefined
 >(undefined);
@@ -35,6 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.get('/auth/me');
       const { user, message } = response.data;
+      localStorage.setItem('allowedRoutes', JSON.stringify(message))
       setAuthState({
         user,
         allowedRoutes: message,
@@ -43,15 +48,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         titlePage: message[0].name
       });
     } catch (error) {
-      console.error('Erro ao carregar dados do usuário:', error);
-      setAuthState({
-        user: null,
-        allowedRoutes: [],
-        loading: false,
-        error: 'Erro ao carregar dados do usuário. Por favor, faça login novamente.',
-        titlePage: ''
-      });
-      // Opcional: remover o token inválido
       Cookies.remove('token');
       router.push('/login');
     }
@@ -61,27 +57,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAuthState(prev => ({ ...prev, loading: true }));
     try {
       const response = await api.post('/login', { email, password });
-      const { token, allowedRoutes } = response.data;
-
+      const { token, allowedRoutes, user } = await response.data;
+  
       Cookies.set('token', token, { expires: 1 });
       
-      const defaultRoute = allowedRoutes.length > 0 ? allowedRoutes[0].href : '/agendamentos';
-      
       setAuthState({
-        user: response.data.user,
+        user,
         allowedRoutes,
         loading: false,
         error: null,
-        titlePage: allowedRoutes[0].name
+        titlePage: allowedRoutes[0]?.name || ''
       });
+      const defaultRoute = allowedRoutes.length > 0 ? allowedRoutes[0].href : '/agendamentos';
       router.push(defaultRoute);
-    } catch (error) {
-      console.error('Erro no login:', error);
-      setAuthState(prev => ({ ...prev, loading: false, error: 'Erro no login. Verifique suas credenciais.' }));
+    } catch (error: any) {
+      if(error & error.response) {
+        toastError(error.response.data.message)
+      }
     }
   };
 
-  const logout = () => {
+  const logout = async (dataLog: ICreateLog) => {
+    await saveLog(dataLog);
+    router.push('/login');
     Cookies.remove('token');
     setAuthState({
       user: null,
@@ -90,7 +88,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       error: null,
       titlePage: ''
     });
-    router.push('/login');
   };
 
   useEffect(() => {
@@ -103,7 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ authState, login, logout }}>
+    <AuthContext.Provider value={{ authState, login, logout, userData }}>
       {children}
     </AuthContext.Provider>
   );

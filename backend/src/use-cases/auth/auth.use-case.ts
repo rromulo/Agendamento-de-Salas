@@ -14,4 +14,8 @@ export class AuthUseCase {
     const data = this.authRepository.getRoutesForUserRole(role);
     return resp(200, data)
   }
+  async logout(): Promise<{status: number, message: unknown}> {
+    const data = this.authRepository.logout();
+    return resp(200, data)
+  }
 }

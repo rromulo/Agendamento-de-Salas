@@ -3,6 +3,9 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import api from '@/app/api/axios';
 import { useEffect, useState } from 'react';
+import { ICreateLog } from '@/interfaces/log.interface';
+import { saveLog } from '@/services/logs';
+import { toastError } from '@/utils/toastify';
 
 export interface ILoginData {
   email: string;
@@ -34,20 +37,28 @@ export function useAuth() {
   const router = useRouter();
   
   const login = async ({ email, password }: ILoginData) => {
-
-    const response = await api.post(`/login`, { email, password });
-
-    console.log("RESPONSE LOGIN USE AUTH -->", response)
-    
-    const { token, allowedRoutes } = response.data;
-    console.log('allowedRoutes USE AUTH --> ', allowedRoutes)
-    
-    Cookies.set('token', token, { expires: 1 });
-    
-    const defaultRoute = allowedRoutes.length > 0 ? allowedRoutes[0].href : '/agendamentos';
-    console.log('defaultRoute --->', defaultRoute)
-    router.push(defaultRoute);
+    try {
+      
+      const response = await api.post(`/login`, { email, password });
+      const { token, allowedRoutes } = response.data;
+      
+      Cookies.set('token', token, { expires: 1 });
+      
+      const defaultRoute = allowedRoutes.length > 0 ? allowedRoutes[0].href : '/agendamentos';
+      router.push(defaultRoute);
+    } catch (error) {
+      if(error && error.response) {
+        toastError(error?.response?.data?.message)
+      }
+    }
   };
 
-  return { login };
+  const logout = async (dataLog: ICreateLog) => {
+    console.log('DATA LOG PARA LOGOUT', dataLog)
+    await saveLog(dataLog);
+    Cookies.remove('token')
+    router.push('/login')
+  }
+
+  return { login , logout};
 }

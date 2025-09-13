@@ -18,14 +18,12 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // CORREÇÃO AQUI: Remova a aspa simples
     const response = await fetch(`${API_URL}/auth/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Cookie: `token=${token}`,
+        Authorization: `${token}`,
       },
-      credentials: 'include',
     });
     
     if (!response.ok) {
@@ -33,7 +31,6 @@ export async function middleware(request: NextRequest) {
     }
     
     const { user, allowedRoutes } = await response.json();
-    console.log('USER E ALLOWED MIDDLEWARE -->', user, allowedRoutes)
     
     if (path.startsWith('/admin') && path !== '/admin/login') {
       console.log('PATH MIDDLEWARE', path)

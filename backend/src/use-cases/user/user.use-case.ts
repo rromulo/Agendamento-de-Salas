@@ -1,7 +1,9 @@
+import { InferAttributes } from 'sequelize';
 import { ICreateAddress } from '../../core/entities/address.entity';
-import { ICreateUser, IUserProps, User } from '../../core/entities/user.entity';
+import { ICreateUser, IUpdateAddress, IUserProps, User } from '../../core/entities/user.entity';
 import { IUserRepository } from '../../core/repositories/interfaces/user.repository.interface';
 import resp from '../../utils/resp';
+import UserModel from '../../infra/models/user.model';
 
 
 export class UserUseCase {
@@ -15,8 +17,13 @@ export class UserUseCase {
     return resp(201, savedUser);
   }
 
-  async getUsers() {
-    const response = await this.userRepository.findAll();
+  async getUsers(page: number, limit: number) {
+    const response = await this.userRepository.findAll(page, limit);
+    return resp(200, response)
+  }
+
+  async getUserById(userId: string) {
+    const response = await this.userRepository.findById(userId);
     return resp(200, response)
   }
 
@@ -25,13 +32,12 @@ export class UserUseCase {
     return resp(200, updatedUser);
   }
 
-  // async changeUserRole (userId: string, newRole: TuserRole, adminId: string): Promise<User> {
-  //   if (!['admin', 'customer'].includes(newRole)) throw new Error('Invalid role');
-
-  //   const user = await this.userRepository.findById(userId);
-    
-  //   if(!user) throw new Error('User not found');
-
-  //   const updatedUser = User.fromEntity(newRole)
-  // }
+  async updateWithAddress(
+    userId: string,
+    dataUser: Partial<InferAttributes<UserModel>>,
+    dataAddress: IUpdateAddress): Promise< {status: number, message: unknown}>
+    {
+      const updatedUser = await this.userRepository.updateWithAddress(userId, dataUser, dataAddress);
+      return resp(200, updatedUser);
+  }
 }

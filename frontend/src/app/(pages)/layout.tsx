@@ -10,7 +10,7 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/react'
-import { FaBars, FaCalendar, FaTimes } from 'react-icons/fa';
+import { FaBars, FaCalendar, FaChevronDown, FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
 import Logo from '../../../public/assets/Logov1.png'
 import { usePathname } from 'next/navigation';
@@ -28,9 +28,21 @@ function classNames(...classes: string[]) {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [tittlePage, setTittlePage] = useState('Agendamentos')
-  const { authState: {allowedRoutes, user, loading, error} } = useAuth();
-
-
+  const { authState, login, logout, userData } = useAuth();
+  const { allowedRoutes, error, loading, titlePage, user } = authState
+  
+  const subtitleRoles: Record<string, Record<string, string>> = {
+    admin: {
+      logs: 'Acompanhe todos os logs de clientes',
+      clientes: 'Overview de todos os clientes',
+      agendamentos: 'Acompanhe todos os agendamentos de clientes de forma simples'
+    },
+    cliente: {
+      agendamentos: 'Acompanhe todos os seus agendamentos de forma simples',
+      logs: 'Acompanhe todas as suas Logs',
+      ['minha-conta']: 'Ajuste informações da sua conta de forma simples'
+    }
+  }
 
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -50,6 +62,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     );
   }
 
+  
+
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -57,8 +71,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </div>
     );
   }
-  if (pathname === '/admin/login' || pathname === '/login') {
+  if (pathname === '/admin/login' || pathname === '/login' || pathname === '/cadastro') {
     return <>{children}</>;
+  }
+
+  if(allowedRoutes.length < 1 && !user) {
+    userData()
   }
 
   return (
@@ -133,8 +151,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex h-[100px] shrink-0 items-center border-b border-gray-200 px-4">
             <Image src={Logo} alt='Logo agendamentos'/>
           </div>
-          <nav className="flex flex-1 flex-col p-4">
-            <ul className="flex flex-1 flex-col gap-y-7">
+          <nav className="flex flex-1 flex-col">
+            <ul className="flex flex-1 flex-col gap-y-7 p-4">
               <li>
                 <ul className="-mx-2 space-y-1 ">
                   {allowedRoutes.map((route) => {
@@ -161,16 +179,49 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   })}
                 </ul>
               </li>
-              <li className="mt-auto border-t border-gray-300">
-                <button
-                  // onClick={logout}
-                  className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold text-gray-400 hover:bg-gray-800 hover:text-white w-full"
-                >
-                  <TbLogout2 className="h-6 w-6 shrink-0" aria-hidden="true" />
-                  Sair
-                </button>
-              </li>
             </ul>
+            {user && (
+              <Menu as="div" className="relative border-t p-4 border-gray-300">
+                <MenuButton className="-m-1.5 flex items-center justify-between p-1.5 w-full">
+                  <div className="">
+                    <span className="block text-black font-medium">
+                      {user.name.split(' ')[0]}
+                    </span>
+                    <span className="text-xs font-normal text-gray-900">
+                      {user.role}
+                    </span>
+                  </div>
+                  <span className="lg:flex lg:items-center">
+                  <FaChevronDown className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  </span>
+                </MenuButton>
+                <MenuItems className="absolute right-0 z-10 -mt-30.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                  <MenuItem>
+                    <button
+                      onClick={() => window.location.href = '/profile'}
+                      className="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50 w-full text-left"
+                    >
+                      Meu perfil
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      onClick={() => {
+                        const dataLog = {
+                          userId: user.id,
+                          action: 'Logout',
+                          description: 'Minha Conta'
+                        }
+                        logout(dataLog)
+                      }}
+                      className="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50 w-full text-left"
+                    >
+                      Sair
+                    </button>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            )}
           </nav>
         </div>
       </div>
@@ -192,7 +243,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex flex-1 justify-start gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex flex-col items-start justify-center gap-x-4 lg:gap-x-6">
                 <h1 className='font-bold text-4xl'>{tittlePage}</h1>
-                <p>Acompanhe todos os agendamentos de clientes de forma simples</p>
+                
+                {
+                  user?.role === 'ADMIN' ? (<p>{subtitleRoles.admin[tittlePage.toLowerCase()]}</p>) : (
+                    <p>{subtitleRoles.cliente[tittlePage.toLowerCase()]}</p>
+                  )
+                }
             </div>
           </div>
         </div>

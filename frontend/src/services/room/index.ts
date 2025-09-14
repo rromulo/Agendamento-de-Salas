@@ -1,16 +1,18 @@
 import { ICreateRoom, IRoomInterface } from '@/interfaces/room.interface';
 import api from '@/app/api/axios';
 import { toastError, toastSuccess } from '@/utils/toastify';
+import { AxiosError } from 'axios';
 
 export const saveRoom = async (room: ICreateRoom): Promise<void> => {
   try {
     const response = await api.post(`/admin/rooms`, room)
     console.log('', response.data)
     toastSuccess('Nova sala criada com sucesso')
-  } catch (error: any) {
-    if(error && error.response) {
-      toastError(error.response.data.message)
-    }
+  } catch (error) {
+    const err = error as AxiosError<{ message: string }>;
+    if (err?.response?.data?.message) {
+      toastError(err.response.data.message);
+    } 
   }
 }
 export const updateRoom = async (id: string, room: ICreateRoom): Promise<void> => {

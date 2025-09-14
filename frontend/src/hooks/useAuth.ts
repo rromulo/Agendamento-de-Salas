@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ICreateLog } from '@/interfaces/log.interface';
 import { saveLog } from '@/services/logs';
 import { toastError } from '@/utils/toastify';
+import { AxiosError } from 'axios';
 
 export interface ILoginData {
   email: string;
@@ -47,9 +48,10 @@ export function useAuth() {
       const defaultRoute = allowedRoutes.length > 0 ? allowedRoutes[0].href : '/agendamentos';
       router.push(defaultRoute);
     } catch (error) {
-      if(error && error.response) {
-        toastError(error?.response?.data?.message)
-      }
+      const err = error as AxiosError<{ message: string }>;
+      if (err?.response?.data?.message) {
+      toastError(err.response.data.message);
+    } 
     }
   };
 

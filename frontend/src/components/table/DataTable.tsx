@@ -67,7 +67,6 @@ export function DataTable<T extends Record<string, any>>({
   }, [])
 
   const handleUpdateRoom = async (dataToUpdate: IRoomUpdate) =>{
-    console.log('handleUpdateRoom -->', {dataToUpdate})
     await updateRoom(dataToUpdate.id, dataToUpdate)
     getRooms();
   }

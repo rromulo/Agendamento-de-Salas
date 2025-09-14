@@ -6,14 +6,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
   const path = request.nextUrl.pathname;
-  console.log('TOKEN DOS COOKIES?? -->', token)
-  console.log('PATH DOS MIDDLEWARE?? -->', path)
   if (path === '/admin/login') {
     return NextResponse.next();
   }
 
   if (!token) {
-    console.log('TEM TOKEN -->', token)
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
@@ -33,7 +30,6 @@ export async function middleware(request: NextRequest) {
     const { user, allowedRoutes } = await response.json();
     
     if (path.startsWith('/admin') && path !== '/admin/login') {
-      console.log('PATH MIDDLEWARE', path)
       if (user.role !== 'ADMIN') {
         const redirectPath =
           user.role === 'CLIENTE'

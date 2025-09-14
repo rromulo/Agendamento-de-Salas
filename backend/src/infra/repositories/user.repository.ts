@@ -7,6 +7,7 @@ import ApiError from '../../utils/apiError';
 import sequelize from '../../infra/database/models'
 import { InferAttributes, Op } from 'sequelize';
 import md5 from 'md5';
+import LogModel from '../../infra/models/log.model';
 
 export class UserRepository implements IUserRepository {
 
@@ -55,7 +56,6 @@ export class UserRepository implements IUserRepository {
         exclude: ['password']
       },
     })
-    console.log(count, rows)
     return {
       logs: rows.map(row => row.toJSON() as unknown as IUserProps),
       totalItems: count,

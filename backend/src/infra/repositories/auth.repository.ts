@@ -48,7 +48,6 @@ export class AuthRepository implements IAuthRepository {
     })
     await this.logRepository.saveLog({userId: user.id, action: 'Login', description: 'Minha Conta'})
     const allowedRoutes = this.getRoutesForUserRole(user.role)
-    console.log(allowedRoutes)
     return {
       token,
       allowedRoutes

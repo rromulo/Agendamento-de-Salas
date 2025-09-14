@@ -34,7 +34,6 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
   const [loading, setLoading] = useState(false);
   const pattern = ['99999-999']
   const { login } = useAuth()
-  console.log('INITIAL DATA NO FORM --->', initialData)
 
   const handleInput = (setState: Dispatch<SetStateAction<string>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setState(event.target.value);
@@ -138,7 +137,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
             label={<span><strong>E-mail</strong> (Obrigatório)</span>}
           />
 
-          {/* {!isProfile && ( */}
+          {!isProfile && (
             <Input
               type={'password'}
               placeHolder={'Senha'}
@@ -147,7 +146,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
               required
               label={<span><strong>Senha de acesso</strong> (Obrigatório)</span>}
             />
-          {/* )} */}
+          )}
 
           <Input
             type={'text'}

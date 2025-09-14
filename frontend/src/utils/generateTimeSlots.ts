@@ -4,7 +4,6 @@ export const generateTimeSlots = (
   scheduleBlock: string
 ): string[] => {
   const timeSlots: string[] = [];
-  console.log('OPEN TIME', openTime, 'CLOSE TIME ->', closeTime, 'SCHEDULE BLOCK ->', scheduleBlock)
   const [openHours, openMinutes] = openTime.split(':').map(Number);
   const [closeHours, closeMinutes] = closeTime.split(':').map(Number);
   
@@ -27,6 +26,5 @@ export const generateTimeSlots = (
     
     currentMinutes += Number(scheduleBlock);
   }
-  console.log('TIMESLOTS -->', timeSlots)
   return timeSlots;
 };

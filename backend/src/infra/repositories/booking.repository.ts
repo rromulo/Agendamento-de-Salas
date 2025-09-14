@@ -94,7 +94,7 @@ export class BookingRepository implements IBookingRepository {
       currentPage: page
     }
   }
-  async findAllByUserId(userId: string, page: number, limit: number = 20): Promise<{
+  async findAllByUserId(userId: string, page: number, limit: number = 20, name?: string): Promise<{
     logs: IBookingProps[];
     totalItems: number;
     totalPages: number;
@@ -102,6 +102,13 @@ export class BookingRepository implements IBookingRepository {
   }> {
 
     const offset = (page - 1) * limit;
+
+    const whereClause: any = {}
+    if(name && name.trim() !== '') {
+      whereClause.name = {
+        [Op.like]: `%${name}%`,
+      }
+    }
     
     const { count, rows } = await BookingModel.findAndCountAll({
       where: { userId },
@@ -116,7 +123,8 @@ export class BookingRepository implements IBookingRepository {
         },
         {
           model: RoomModel,
-          as: 'room'
+          as: 'room',
+          where: whereClause
         }
       ],
       attributes: {

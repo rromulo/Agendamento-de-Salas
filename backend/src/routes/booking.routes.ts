@@ -20,6 +20,7 @@ const bookingController = new BookingController(bookingUseCase);
 bookingRouter.get('/admin/bookings/:page/:limit/:name', verifyToken, authorizeAdmin, bookingController.listAllBookings.bind(bookingController))
 bookingRouter.get('/admin/bookings/:page/:limit', verifyToken, authorizeAdmin, bookingController.listAllBookings.bind(bookingController))
 bookingRouter.get('/bookings/:userId/:page/:limit', verifyToken, bookingController.findAllByUserId.bind(bookingController))
+bookingRouter.get('/bookings/:userId/:page/:limit/:name', verifyToken, bookingController.findAllByUserId.bind(bookingController))
 bookingRouter.post('/bookings', verifyToken, bookingController.createBooking.bind(bookingController))
 bookingRouter.patch('/bookings/:userId/:bookingId', verifyToken, bookingController.updateStatus.bind(bookingController))
 

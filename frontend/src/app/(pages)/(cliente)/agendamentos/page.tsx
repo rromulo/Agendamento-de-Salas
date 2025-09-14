@@ -1,4 +1,5 @@
 'use client'
+import { useAuth } from '@/app/context/authContext';
 import { Pagination } from '@/components/paginate';
 import { DataTable } from '@/components/table/DataTable';
 import { IBooking } from '@/interfaces/booking,interface';
@@ -12,13 +13,17 @@ export default function AdminAgendamentos() {
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState("1")
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [name, setName] = useState<string>('')
+  const { authState: { user } } = useAuth()
 
-  const loadBookings = async (page: string) => {
+  const loadBookings = async (page: string, name?: string) => {
     try {
       setLoading(true)
-      const bookingsData = await getBookinsByUser(+page, 20)
-      setBookings(bookingsData.logs)
-      setTotalPages(bookingsData.totalPages)
+      setTimeout(async () => {
+        const bookingsData = await getBookinsByUser(+page, 20, name)
+        setBookings(bookingsData.logs)
+        setTotalPages(bookingsData.totalPages)
+      }, 1000)
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error)
     } finally {
@@ -26,17 +31,18 @@ export default function AdminAgendamentos() {
     }
   }
 
+  const handleSearchBookings = async (name: string, page: number, limit: number = 20) => {
+    loadBookings('1', name)
+  }
+
   useEffect(() => {
-    loadBookings(page)
-  }, [])
-  useEffect(() => {
-    loadBookings(page)
+    loadBookings(page, name)
   }, [page])
 
   const handleStatusBooking = async (userId: string, bookingId: string, status: 'recusado') => {
     setLoading(true)
     const response = await updateBooking(userId, bookingId, status)
-    await loadBookings(page)
+    await loadBookings(page, name)
   }
 
   if (loading) {
@@ -50,9 +56,9 @@ export default function AdminAgendamentos() {
   return (
     <div className=''>
       <DataTable
-        onFilter={() => {}}
-        setValue={() => {}}
-        value=''
+        onFilter={handleSearchBookings}
+        setValue={setName}
+        value={name}
         refreshData={loadBookings}
         page={page}
         path='agendamentos'

@@ -22,7 +22,7 @@ function ClientesAdmin() {
   const [totalPages, setTotalPages] = useState<number>(1)
   const [name, setName] = useState<string>('')
 
-  const loadUsers = async (page: string) => {
+  const loadUsers = async (page: string, name?: string) => {
     try {
       setLoading(true)
       const usersData = await getUsersByName(+page, 20, name);
@@ -55,9 +55,7 @@ function ClientesAdmin() {
   }
 
   const handleSearchUsers = async (name: string, page: number, limit: number = 20) => {
-    await getUsersByName(page, limit, name);
-    setName(name)
-    loadUsers("1")
+    loadUsers("1", name)
   }
 
   useEffect(() => {

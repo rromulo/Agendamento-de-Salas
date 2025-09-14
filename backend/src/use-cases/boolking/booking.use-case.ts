@@ -17,8 +17,8 @@ export class BookingUseCase {
     return resp(201, response)
   }
 
-  async findAllByUserId(userId: string, page: number, limit: number): Promise<{ status: number, message: unknown }> {
-    const response = await this.bookingRepository.findAllByUserId(userId, page, limit)
+  async findAllByUserId(userId: string, page: number, limit: number, name: string): Promise<{ status: number, message: unknown }> {
+    const response = await this.bookingRepository.findAllByUserId(userId, page, limit, name)
     return resp(201, response)
   }
   

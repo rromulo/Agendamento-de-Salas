@@ -10,6 +10,7 @@ import { saveBooking, getBookinsByUser } from '@/services/bookings';
 import { ICreateBooking } from '@/interfaces/booking,interface';
 import Input from '../input/Input';
 import { SearchComponent } from '../input/SearchComponent';
+import { usePathname } from 'next/navigation';
 
 interface Column<T> {
   key: keyof T | string;
@@ -51,6 +52,7 @@ export function DataTable<T extends Record<string, any>>({
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [search, setSearch] = useState("");
   const {authState: { user }} = useAuth()
+  const pathname = usePathname()
 
   const getRooms = async () => {
     try {
@@ -82,25 +84,30 @@ export function DataTable<T extends Record<string, any>>({
       await refreshData(page)
     }
   }
+
+  const handleTextPlaceHolder = () => {
+    if(!['/admin/logs', '/logs'].includes(pathname)) return 'Filtre por nome';
+    if(pathname === '/logs') return 'Filtre por tipo de atividade ou Módulo';
+    return 'Filtre por cliente, tipo de atividade ou Módulo'
+  }
  
   return (
     <div className="p-8 bg-white border-1 border-gray-300 rounded-md">
       <div className="flex flex-wrap items-center gap-4 lg:gap-40 mb-4 lg:flex-nowrap justify-between">
         <div className='flex items-center gap-2 w-full lg:w-2/3'>
-            {
-              user?.role === 'ADMIN' && (
-                <SearchComponent
-                  value={value}
-                  delay={800}
-                  setValue={setValue}
-                  onSearch={onFilter}
-                  page={+page}
-                  limit={20}
-                  placeHolder='Filtre por nome'
-                  className='w-full outline-0'
-                />
-              )
-            }
+          {
+
+          }
+            <SearchComponent
+              value={value}
+              delay={500}
+              setValue={setValue}
+              onSearch={onFilter}
+              page={+page}
+              limit={20}
+              placeHolder={handleTextPlaceHolder()}
+              className='w-full outline-0'
+            />
             <input
               type="date"
               value={date}

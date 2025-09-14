@@ -18,7 +18,8 @@ export class BookingController {
 
   async findAllByUserId(req: Request, res: Response, next: NextFunction) {
     const {userId, page, limit} = req.params;
-    const {status, message} = await this.bookingUseCase.findAllByUserId(userId,+page,+limit)
+    const name = req.params.name || (req.query.name as string);
+    const {status, message} = await this.bookingUseCase.findAllByUserId(userId,+page,+limit, name)
     res.status(status).json(message)
   }
 

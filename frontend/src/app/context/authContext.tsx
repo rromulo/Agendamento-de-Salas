@@ -40,7 +40,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.get('/auth/me');
       const { user, message } = response.data;
-      localStorage.setItem('allowedRoutes', JSON.stringify(message))
       setAuthState({
         user,
         allowedRoutes: message,

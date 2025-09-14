@@ -4,7 +4,7 @@ import { InferAttributes } from 'sequelize';
 
 export interface IBookingRepository {
   save(booking: InferAttributes<BookingModel>): Promise<Partial<IBookingProps>>;
-  findAll(page: number, limit: number): Promise<{
+  findAll(page: number, limit: number, name: string): Promise<{
     logs: IBookingProps[];
     totalItems: number;
     totalPages: number;

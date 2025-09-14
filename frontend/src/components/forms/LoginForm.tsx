@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import Logo from '../../../public/assets/Logov1.png'
-import { useAuth } from '@/app/context/authContext';
+import { useAuth } from '@/hooks/useAuth';
 
 interface LoginFormProps {
   title: string;

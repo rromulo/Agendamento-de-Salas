@@ -6,8 +6,6 @@ import { ICreateAddress, IUpdateAddress } from '@/interfaces/address.interface';
 import { AxiosError } from 'axios';
 
 
-//!! SERVICES DO USUÁRIO
-
 export const getAllUsers = async (page: number, limit: number = 20, currentPage?: number): Promise<{logs: IUserProps[], page: number, totalPages: number}> => {
   console.log('ENTROU NO GET ALL USERS')  
   const response = await api.get(`/admin/users/${currentPage ?? page}/${limit}`)

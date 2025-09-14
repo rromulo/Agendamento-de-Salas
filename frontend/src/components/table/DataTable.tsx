@@ -31,9 +31,7 @@ interface DataTableProps<T> {
   value: string;
 }
 
-const handleUpdateRoom = (dataToUpdate: IRoomUpdate) =>{
-  console.log('handleUpdateRoom -->', {dataToUpdate})
-}
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function DataTable<T extends Record<string, any>>({
@@ -53,6 +51,7 @@ export function DataTable<T extends Record<string, any>>({
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [search, setSearch] = useState("");
   const {authState: { user }} = useAuth()
+
   const getRooms = async () => {
     try {
       const response = await getAllRooms()
@@ -67,6 +66,12 @@ export function DataTable<T extends Record<string, any>>({
     getRooms()
   }, [])
 
+  const handleUpdateRoom = async (dataToUpdate: IRoomUpdate) =>{
+    console.log('handleUpdateRoom -->', {dataToUpdate})
+    await updateRoom(dataToUpdate.id, dataToUpdate)
+    getRooms();
+  }
+
   const handleSaveBooking = async (dataSave: {roomId: string, startTime: string, endTime:string, status: string, date: string}) => {
     await saveBooking(
       {
@@ -78,29 +83,16 @@ export function DataTable<T extends Record<string, any>>({
       await refreshData(page)
     }
   }
-
-  
-
-  
+ 
   return (
     <div className="p-8 bg-white border-1 border-gray-300 rounded-md">
       <div className="flex flex-wrap items-center gap-4 lg:gap-40 mb-4 lg:flex-nowrap justify-between">
         <div className='flex items-center gap-2 w-full lg:w-2/3'>
-            {/* <Input
-              type={'text'}
-              placeHolder={'Filtre por nome'}
-              value={search}
-              label={undefined}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                onFilter?.(e.target.value);
-              }}
-            /> */}
             {
               user?.role === 'ADMIN' && (
                 <SearchComponent
                   value={value}
-                  delay={1000}
+                  delay={800}
                   setValue={setValue}
                   onSearch={onFilter}
                   page={+page}
@@ -110,16 +102,6 @@ export function DataTable<T extends Record<string, any>>({
                 />
               )
             }
-            {/* <input
-              type="text"
-              placeholder="Filtre por nome"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                // onFilter?.(e.target.value);
-              }}
-              className="border border-gray-300 p-2 rounded-md w-full outline-0"
-            /> */}
             <input
               type="date"
               value={date}

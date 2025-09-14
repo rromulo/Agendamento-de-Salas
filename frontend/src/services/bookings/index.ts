@@ -17,8 +17,8 @@ export const saveBooking = async (dataBooking: ICreateBooking) => {
   
 }
 
-export const getAllBookings = async (page: number, limit: number, currentPage?: number): Promise<{logs: IBooking[] ,page: number, totalPages: number}> => {
-  const response = await api.get(`/admin/bookings/${currentPage ?? page}/${limit}`)
+export const getAllBookings = async (page: number, limit: number, name?: string): Promise<{logs: IBooking[] ,page: number, totalPages: number}> => {
+  const response = await api.get(`/admin/bookings/${page}/${limit}/${name ?? ''}`)
   console.log(response.data)
   return response.data
 }

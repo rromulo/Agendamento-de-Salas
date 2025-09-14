@@ -14,11 +14,12 @@ export default function AdminAgendamentos() {
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState("1")
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [name, setName] = useState<string>('')
 
   const loadBookings = async (page: string) => {
     try {
       setLoading(true)
-      const bookingsData = await getAllBookings(+page, 20)
+      const bookingsData = await getAllBookings(+page, 20, name)
       setBookings(bookingsData.logs)
       setTotalPages(bookingsData.totalPages)
     } catch (error) {
@@ -28,20 +29,20 @@ export default function AdminAgendamentos() {
     }
   }
 
+  const handleSearchBookings = async (name: string, page: number, limit: number = 20) => {
+    await getAllBookings(page, limit, name);
+    setName(name)
+    loadBookings('1')
+  }
 
-
-  useEffect(() => {
-    loadBookings(page)
-  }, [])
   useEffect(() => {
     loadBookings(page)
   }, [page])
 
   const handleStatusBooking = async (userId: string, bookingId: string, status: 'pendente' | 'confirmado' | 'recusado') => {
     setLoading(true)
-    const response = await updateBooking(userId, bookingId, status)
-    console.log('RESPONSE HANDLESTATUS ->', response)
-    await loadBookings(page)
+    await updateBooking(userId, bookingId, status)
+    loadBookings(page)
   }
 
   if (loading) {
@@ -52,21 +53,18 @@ export default function AdminAgendamentos() {
     );
   }
 
-  // const handleSearchUsers = async (name: string, page: number, limit: number = 20) => {
-  //   const response = await getUsersByName(name, page, limit);
-
-  // }
+ 
 
 
   return (
     <div className=''>
       <DataTable
-        onFilter={() => {}}
-        setValue={() => {}}
-        value=''
+        setValue={setName}
+        value={name}
+        onFilter={handleSearchBookings}
+        data={bookings}
         path='agendamentos'
         role='ADMIN'
-        data={bookings}
         columns={[
           { key: "date", label: "Data agendamento",
             render: (record: IBooking) =>{

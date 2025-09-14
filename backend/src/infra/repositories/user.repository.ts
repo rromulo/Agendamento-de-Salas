@@ -70,7 +70,6 @@ export class UserRepository implements IUserRepository {
     totalPages: number;
     currentPage: number;
   }> {
-    console.log('NAME NO BACKEND',name)
     const offset = (page - 1) * limit;
 
     const whereClause: any = {}
@@ -120,7 +119,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async updateWithAddress(id: string, dataUser: InferAttributes<UserModel>, dataAddress: IUpdateAddress): Promise<Partial<IUserProps>> {
-    console.log('DATA USER DE NOVO ->', dataUser)
     return await sequelize.transaction(async (t) => {
       const hashPassword = md5(dataUser.password)
       const existing = await UserModel.findByPk(id);
@@ -143,7 +141,6 @@ export class UserRepository implements IUserRepository {
       );
       const newUser = await UserModel.findByPk(existing.id, { transaction: t });
       const [affectedRowsUSer] = user
-      console.log('RETORNO AQUI BACK -->', affectedRowsUSer)
       return { ...newUser, address } as unknown as UserModel & { address: AddressModel };
     });
   }

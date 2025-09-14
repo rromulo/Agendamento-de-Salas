@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import Logo from '../../../public/assets/Logov1.png'
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/app/context/authContext';
 
 interface LoginFormProps {
   title: string;
@@ -96,7 +96,7 @@ export default function LoginForm({
             <p className="text-start text-md text-gray-600">
               Ainda não tem um cadastro?{" "}
             </p>
-            <a href="/register" className="font-bold text-md text-black hover:underline">
+            <a href="/cadastro" className="font-bold text-md text-black hover:underline">
               Cadastre-se
             </a>
           </div>

@@ -7,6 +7,7 @@ import { useModal } from '@/hooks/useModal';
 import { useEffect, useState } from 'react';
 import { mask } from 'remask';
 import { generateTimeSlots } from '@/utils/generateTimeSlots';
+import ButtonOpenModal from '@/components/buttons/ButtonOpenModal';
 
 interface ScheduleModalProps {
   roomName: string;
@@ -51,12 +52,7 @@ export function ScheduleModal({
   
   return (
     <>
-      <button
-        onClick={open}
-        className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 cursor-pointer"
-      >
-        Novo Agendamento
-      </button>
+      <ButtonOpenModal onClick={open} text='Novo Agendamento' />
 
       <Modal
         isOpen={isOpen}

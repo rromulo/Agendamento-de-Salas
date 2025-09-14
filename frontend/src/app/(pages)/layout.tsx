@@ -54,13 +54,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     FaCalendar,
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+  //     </div>
+  //   );
+  // }
 
   
 
@@ -98,15 +98,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </button>
             </div>
             
-            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
-              <div className="flex h-16 shrink-0 items-center">
-                <h1 className="text-white text-xl font-semibold"></h1>
+            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
+              <div className="flex h-[100px] shrink-0 items-center border-b border-gray-200 px-4">
+                <Image src={Logo} alt='Logo agendamentos'/>
               </div>
               <nav className="flex flex-1 flex-col">
                 <ul className="flex flex-1 flex-col gap-y-7">
                   <li>
                     <ul className="-mx-2 space-y-1">
-                      {/* {allowedRoutes.map((route) => {
+                      {allowedRoutes.map((route) => {
                         const IconComponent = iconComponents[route.icon];
                         return (
                           <li key={route.href}>
@@ -114,9 +114,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                               href={route.href}
                               className={classNames(
                                 pathname === route.href
-                                  ? 'bg-gray-800 text-white'
-                                  : 'text-gray-400 hover:bg-gray-800 hover:text-white',
-                                'group flex gap-x-3 rounded-md p-2 text-sm font-semibold'
+                                  ? 'bg-black text-white p-3'
+                                  : 'text-black-400 hover:bg-gray-900 hover:text-white',
+                                'group flex gap-x-3 rounded-md p-3 text-sm font-semibold'
                               )}
                             >
                               {IconComponent && (
@@ -126,20 +126,46 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             </Link>
                           </li>
                         );
-                      })} */}
+                      })}
                     </ul>
                   </li>
-                  <li className="mt-auto">
-                    <button
-                      // onClick={logout}
-                      className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold text-gray-400 hover:bg-gray-800 hover:text-white w-full"
-                    >
-                      {/* <TbLogout2 className="h-6 w-6 shrink-0" aria-hidden="true" /> */}
-                      Sair
-                    </button>
-                  </li>
+                 
                 </ul>
               </nav>
+              {user && (
+              <Menu as="div" className="relative border-t p-4 border-gray-300">
+                <MenuButton className="-m-1.5 flex items-center justify-between p-1.5 w-full">
+                  <div className="flex flex-row justify-start flex-wrap">
+                    <span className="block text-black font-medium w-full text-left">
+                      {user.name.split(' ')[0]}
+                    </span>
+                    <span className="text-xs font-normal text-gray-900 text-left">
+                      {user.role}
+                    </span>
+                  </div>
+                  <span className="lg:flex lg:items-center">
+                  <FaChevronDown className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  </span>
+                </MenuButton>
+                <MenuItems className="absolute right-0 z-10 -mt-20.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                   <MenuItem>
+                    <button
+                      onClick={() => {
+                        const dataLog = {
+                          userId: user.id,
+                          action: 'Logout',
+                          description: 'Minha Conta'
+                        }
+                        logout(dataLog)
+                      }}
+                      className="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50 w-full text-left"
+                    >
+                      Sair
+                    </button>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            )}
             </div>
           </DialogPanel>
         </div>

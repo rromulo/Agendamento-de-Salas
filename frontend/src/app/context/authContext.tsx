@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authState, setAuthState] = useState<IAuthState>({
     user: null,
     allowedRoutes: [],
-    loading: true,
+    loading: false,
     error: null,
     titlePage: ''
   });

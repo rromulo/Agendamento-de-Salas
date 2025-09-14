@@ -9,7 +9,7 @@ import SwitchLoginRegisterButton from '@/components/buttons/SwitchLoginRegisterB
 function Login() {
   return (
     <div className="flex flex-row flex-wrap justify-center items-center w-full">
-      <div className='flex justify-between px-20 py-4 w-full h-[88px] border-b border-gray-300'>
+      <div className='flex justify-between px-4  py-4 w-full h-[88px] border-b border-gray-300 lg:px-2'>
         <Image src={Logo} alt="logo agendamento de salas" />
         <SwitchLoginRegisterButton text='Cadastre-se' link='cadastro' />
       </div>

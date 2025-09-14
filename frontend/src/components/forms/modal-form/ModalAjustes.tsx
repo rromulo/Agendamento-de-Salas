@@ -7,6 +7,7 @@ import { useModal } from '@/hooks/useModal';
 import { useEffect, useState } from 'react';
 import { mask } from 'remask';
 import ModalCreateRoom from './ModalCreateRoom';
+import ButtonOpenModal from '@/components/buttons/ButtonOpenModal';
 
 interface AdjustmentModalProps {
   onSave: (data: IRoomUpdate) => void;
@@ -45,12 +46,7 @@ export function AdjustmentModal({
 
   return (
     <>
-      <button
-        onClick={open}
-        className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 cursor-pointer"
-      >
-        Ajustes de agendamento
-      </button>
+      <ButtonOpenModal onClick={open} text='Ajustes de agendamento' />
 
       <Modal
         isOpen={isOpen}

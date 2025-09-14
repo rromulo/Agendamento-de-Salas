@@ -84,8 +84,8 @@ export function DataTable<T extends Record<string, any>>({
   
   return (
     <div className="p-8 bg-white border-1 border-gray-300 rounded-md">
-      <div className="flex items-center gap-2 mb-4 justify-between">
-        <div className='flex items-center gap-2 w-2/3'>
+      <div className="flex flex-wrap items-center gap-4 lg:gap-40 mb-4 lg:flex-nowrap justify-between">
+        <div className='flex items-center gap-2 w-full lg:w-2/3'>
             {/* <Input
               type={'text'}
               placeHolder={'Filtre por nome'}
@@ -127,7 +127,7 @@ export function DataTable<T extends Record<string, any>>({
               className="border p-2 rounded-md border-gray-300"
             />
         </div>
-        <div>
+        <div className='w-full lg:w-[288px]'>
           {
             (path === 'agendamentos' && role === 'ADMIN') && (
 

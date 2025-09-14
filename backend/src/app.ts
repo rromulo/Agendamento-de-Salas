@@ -7,7 +7,10 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://agendamento-de-salas-ibsdo2y35-rromulos-projects-93f3e61e.vercel.app"
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-type', 'Accept', 'Authorization']

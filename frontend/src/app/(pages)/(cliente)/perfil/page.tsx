@@ -8,7 +8,7 @@ import { updateUser } from '@/services/users'
 
 const MinhaConta = () => {
   const [userDataProps, setUserDataProps] = useState<IUserProps | null>(null)
-  const { authState: { user, loading } } = useAuth()
+  const { authState: { user, loading }, userData } = useAuth()
   
 
   const getUser = async () => {
@@ -40,6 +40,7 @@ const MinhaConta = () => {
 
   useEffect(() => {
     getUser()
+    userData()
   }, [])
 
   useEffect(() => {

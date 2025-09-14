@@ -1,8 +1,5 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
-
-
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
@@ -20,6 +17,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `${token}`;
     }
+    
     return config
   }
 )
@@ -27,11 +25,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      const router = useRouter();
-      router.push('/agendamentos')
-    }
-    return Promise.reject(error); // Esta linha está faltando
+    // if (error.response?.status === 401 && !error.config.url.includes('/login')) {
+    //   Cookies.remove('token');
+    //   window.location.href = '/login';
+    // }
+    return Promise.reject(error);
   }
 )
 

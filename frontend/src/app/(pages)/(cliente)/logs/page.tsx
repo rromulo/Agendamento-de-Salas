@@ -6,17 +6,17 @@ import { getAllLogs, getAllLogsByUser } from '@/services/logs';
 import React, { useEffect, useState } from 'react'
 
 function LogsAdmin() {
-  const[logs, setLogs] = useState<ILogProps[] | []>([])
+  const[logs, setLogs] = useState<ILogProps[] | undefined | []>([])
   const[loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState("1")
-  const [totalPages, setTotalPages] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number | undefined>(1)
 
   const loadLogs = async (page: string) => {
     try {
       setLoading(true)
       const logsData = await getAllLogsByUser(+page, 20)
-      setLogs(logsData.logs)
-      setTotalPages(logsData.totalPages)
+      setLogs(logsData?.logs)
+      setTotalPages(logsData?.totalPages)
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error)
     } finally {
@@ -44,7 +44,7 @@ function LogsAdmin() {
         onFilter={() => {}}
         setValue={() => {}}
         value=''
-        data={logs}
+        data={logs || []}
         columns={[
           { key: "atividade", label: "Tipo de atividade",
             render: (record: ILogProps) => (
@@ -75,10 +75,14 @@ function LogsAdmin() {
         ]}
         // actions={undefined}
       />
-      <Pagination
-        pagination={{ currentPage: Number(page), totalPages }}
-        handleOnClick={setPage}
-      />
+      {
+        logs && (
+          <Pagination
+          pagination={{ currentPage: Number(page), totalPages: 0 }}
+          handleOnClick={setPage}
+          />
+        )
+      }
     </div>
   );
 }

@@ -42,7 +42,7 @@ function ClientesAdmin() {
   const handlePermissionUser = async (userId: string, type: 'scheduling' | 'logs' | 'active', hasPermission: boolean) => {
     console.log('DADOS HANDLE PERMISSIONUSER -->', userId, type, hasPermission)
     if(type === 'scheduling'){
-      const response = await setActivePermission(userId, {canScheduling: hasPermission}, +page);
+      const response = await setSchedulingPermission(userId, {canScheduling: hasPermission}, +page);
       setUsers(response?.logs)
     }
     if(type === 'logs') {
@@ -50,7 +50,7 @@ function ClientesAdmin() {
       setUsers(response?.logs)
     } 
     if(type === 'active') {
-      const response = await setSchedulingPermission(userId, {isActive: hasPermission}, +page)
+      const response = await setActivePermission(userId, {isActive: hasPermission}, +page)
       setUsers(response?.logs)
     }
   }

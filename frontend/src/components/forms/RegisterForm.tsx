@@ -103,7 +103,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
 
   return (
     <div className={`flex items-center justify-center ${isProfile ? '' : 'min-h-screen'}`}>
-      <div className={`bg-white rounded-lg w-full ${isProfile ? '' : 'shadow-lg max-w-md'}`}>
+      <div className={`bg-white rounded-lg w-full'}`}>
         <h1 className="text-xl font-semibold text-center mb-6">
           {isProfile ? '' : 'Cadastre-se'}
         </h1>

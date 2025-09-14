@@ -36,8 +36,7 @@ export function AdjustmentModal({
       setScheduleBlockRoom(roomFiltered.scheduleBlock)
       setOpenCloseTime(`${roomFiltered?.openTime.slice(0, -3)} - ${roomFiltered?.closeTime.slice(0, -3)}`)
       setRoomName(roomFiltered.name)
-      console.log('ROOM FILTRADA ->', roomFiltered)
-    } else console.log('Não ACHOU SALA')
+    }
   }
 
   useEffect(() => {

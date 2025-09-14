@@ -40,7 +40,6 @@ function ClientesAdmin() {
   }, [page])
 
   const handlePermissionUser = async (userId: string, type: 'scheduling' | 'logs' | 'active', hasPermission: boolean) => {
-    console.log('DADOS HANDLE PERMISSIONUSER -->', userId, type, hasPermission)
     if(type === 'scheduling'){
       const response = await setSchedulingPermission(userId, {canScheduling: hasPermission}, +page);
       setUsers(response?.logs)

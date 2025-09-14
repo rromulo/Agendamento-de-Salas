@@ -6,7 +6,6 @@ import { AxiosError } from 'axios';
 export const saveRoom = async (room: ICreateRoom): Promise<void> => {
   try {
     const response = await api.post(`/admin/rooms`, room)
-    console.log('', response.data)
     toastSuccess('Nova sala criada com sucesso')
   } catch (error) {
     const err = error as AxiosError<{ message: string }>;

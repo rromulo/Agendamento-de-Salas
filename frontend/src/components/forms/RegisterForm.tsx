@@ -34,7 +34,6 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
   const [loading, setLoading] = useState(false);
   const pattern = ['99999-999']
   const { login } = useAuth()
-  console.log('INITIAL DATA NO FORM --->', initialData)
 
   const handleInput = (setState: Dispatch<SetStateAction<string>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setState(event.target.value);

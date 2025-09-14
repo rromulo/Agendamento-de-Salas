@@ -56,7 +56,6 @@ export class UserRepository implements IUserRepository {
         exclude: ['password']
       },
     })
-    console.log(count, rows)
     return {
       logs: rows.map(row => row.toJSON() as unknown as IUserProps),
       totalItems: count,
@@ -142,8 +141,6 @@ export class UserRepository implements IUserRepository {
       );
       const newUser = await UserModel.findByPk(existing.id, { transaction: t });
       const [affectedRowsUSer] = user
-      // const respLog = await LogModel.create({userId: newUser?.id || '', action: 'Atualização de perfil', description: 'Minha conta'})
-      // console.log(respLog)
       return { ...newUser, address } as unknown as UserModel & { address: AddressModel };
     });
   }

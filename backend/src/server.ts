@@ -4,13 +4,10 @@ import sequelize from "./infra/database/models";
 
 const PORT = process.env.PORT || 3001;
 
-console.log('=== INICIANDO SERVER ==='); // Log de debug
 
 (async () => {
   try {
-    console.log('Tentando conectar ao banco...');
     await sequelize.sync();
-    console.log('✅ MODELS SINCRONIZADOS COM BANCO');
 
     app.listen(PORT, () => {
       console.log(`✅ Server running on port ${PORT}`);

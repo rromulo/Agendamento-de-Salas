@@ -3,6 +3,7 @@ import { Pagination } from '@/components/paginate';
 import { DataTable } from '@/components/table/DataTable';
 import { IBooking } from '@/interfaces/booking,interface';
 import { getAllBookings, getBookinsByUser, updateBooking } from '@/services/bookings';
+import { toastError } from '@/utils/toastify';
 import { useEffect, useState } from 'react';
 
 export default function AdminAgendamentos() {
@@ -35,7 +36,6 @@ export default function AdminAgendamentos() {
   const handleStatusBooking = async (userId: string, bookingId: string, status: 'recusado') => {
     setLoading(true)
     const response = await updateBooking(userId, bookingId, status)
-    console.log('RESPONSE HANDLESTATUS ->', response)
     await loadBookings(page)
   }
 
@@ -112,7 +112,13 @@ export default function AdminAgendamentos() {
             {
               row.status !== 'recusado' && (<>
 
-                <button onClick={() => {handleStatusBooking(row.user.id, row.id, 'recusado')}} className="text-white bg-black rounded-full h-[30px] w-[30px]">X</button>
+                <button onClick={() => {
+                  if(!row.user.canScheduling) {
+                    toastError('Você não tem permissão para cancelar agendamentos')
+                  } else {
+                    handleStatusBooking(row.user.id, row.id, 'recusado')
+                  }
+                }} className="text-white bg-black rounded-full h-[30px] w-[30px]">X</button>
               </>)
             }
           </div>

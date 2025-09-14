@@ -42,8 +42,7 @@ export function ScheduleModal({
       const blockGenerate = generateTimeSlots(roomFiltered?.openTime || '', roomFiltered?.closeTime || '',  roomFiltered?.scheduleBlock[0] || '')
       setDefineScheduleBlock(blockGenerate)
       setOpenCloseTime(blockGenerate[0])
-      console.log('ROOM FILTRADA ->', roomFiltered)
-    } else console.log('Não ACHOU SALA')
+    }
   }
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export function ScheduleModal({
               </label>
               <select
                 defaultValue={room?.scheduleBlock[0]}
-                onChange={(e) => {console.log(e.target.value);setOpenCloseTime(e.target.value)}}
+                onChange={(e) => {setOpenCloseTime(e.target.value)}}
                 className="w-full p-3 border border-gray-300 rounded-md"
               >
                 {

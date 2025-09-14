@@ -8,22 +8,18 @@ import { saveLog } from '../logs';
 
 
 export const getAllUsers = async (page: number, limit: number = 20, currentPage?: number): Promise<{logs: IUserProps[], page: number, totalPages: number}> => {
-  console.log('ENTROU NO GET ALL USERS')  
   const response = await api.get(`/admin/users/${currentPage ?? page}/${limit}`)
-    console.log('LOG DO GET ALL USER ---->',response.data)
     return response.data
 }
 
 export const getUsersByName = async (page: number, limit: number = 20, name?: string): Promise<{logs: IUserProps[], page: number, totalPages: number}> => {
   const response = await api.get(`/admin/users/${page}/${limit}/${name ?? ''}`)
-  console.log('LOG DO getUsersByName ---->',response.data)
   return response.data
 }
 
 export const saveUser = async (userData: ICreateUser, login: (credentials: { email: string; password: string }) => Promise<void>) => {
   try {
     const response = await api.post('/users', userData);
-    console.log('Response save user', response.data)
     if (response.status === 201) {
       toastSuccess('Cadastro realizado com sucesso.')
       toastSuccess('Você será redirecionado dentro de 3 segundos')
@@ -49,7 +45,6 @@ export const getUserById = async (userId: string) => {
 
 export const updateUser = async (userId: string, dataUser: Partial<IUserProps>) => {
   try {
-    console.log('DATA USER UPDATE',{...dataUser})
     const response = await api.patch(`/user/${userId}`, {...dataUser, address: dataUser.address})
     if(response.status === 200) {
       toastSuccess('Informações salvas com sucesso.')

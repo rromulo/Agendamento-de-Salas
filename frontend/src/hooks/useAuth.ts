@@ -39,7 +39,6 @@ export function useAuth() {
   
   const login = async ({ email, password }: ILoginData) => {
     try {
-      console.log('DATA DO LOGIN')
       const response = await api.post(`/login`, { email, password });
       const { token, allowedRoutes } = response.data;
       
@@ -49,7 +48,6 @@ export function useAuth() {
       router.push(defaultRoute);
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
-      console.log('ERRO NO LOGIN', err)
       if (err?.response?.data?.message) {
         toastError(err.response.data.message);
       } 
@@ -57,7 +55,6 @@ export function useAuth() {
   };
 
   const logout = async (dataLog: ICreateLog) => {
-    console.log('DATA LOG PARA LOGOUT', dataLog)
     await saveLog(dataLog);
     Cookies.remove('token')
     router.push('/login')

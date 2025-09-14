@@ -50,6 +50,9 @@ export default function AdminAgendamentos() {
   return (
     <div className=''>
       <DataTable
+        onFilter={() => {}}
+        setValue={() => {}}
+        value=''
         refreshData={loadBookings}
         page={page}
         path='agendamentos'

@@ -17,4 +17,10 @@ export interface IUserRepository {
     totalPages: number;
     currentPage: number;
   }>
+  getUsersByName(page: number, limit: number, name: string): Promise<{
+    logs: IUserProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }>
 }

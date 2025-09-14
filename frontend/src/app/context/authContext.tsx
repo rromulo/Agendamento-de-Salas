@@ -12,6 +12,7 @@ import {
 import { toastError } from '@/utils/toastify';
 import { saveLog } from '@/services/logs';
 import { ICreateLog } from '@/interfaces/log.interface';
+import { AxiosError } from 'axios';
 
 // Criação do Contexto de Autenticação
 const AuthContext = createContext<
@@ -70,10 +71,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       const defaultRoute = allowedRoutes.length > 0 ? allowedRoutes[0].href : '/agendamentos';
       router.push(defaultRoute);
-    } catch (error: any) {
-      if(error & error.response) {
-        toastError(error.response.data.message)
-      }
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      if (err?.response?.data?.message) {
+        toastError(err.response.data.message);
+      } 
     }
   };
 

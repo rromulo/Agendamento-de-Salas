@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AdjustmentModal } from '../forms/modal-form/ModalAjustes';
 import { IRoomInterface, IRoomUpdate } from '@/interfaces/room.interface';
 import { getAllRooms, updateRoom } from '@/services/room';
@@ -9,6 +9,7 @@ import { useAuth } from '@/app/context/authContext';
 import { saveBooking, getBookinsByUser } from '@/services/bookings';
 import { ICreateBooking } from '@/interfaces/booking,interface';
 import Input from '../input/Input';
+import { SearchComponent } from '../input/SearchComponent';
 
 interface Column<T> {
   key: keyof T | string;
@@ -19,13 +20,15 @@ interface Column<T> {
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
-  onFilter?: (value: string) => void;
+  onFilter: (term: string, page: number, limit: number) => void;
   onDateFilter?: (date: string) => void;
   actions?: (item: T) => React.ReactNode;
   path?: string;
   role?: 'ADMIN' | 'CLIENTE',
   refreshData?: (page: string) => Promise<void>;
   page?: string
+  setValue: Dispatch<SetStateAction<string>>;
+  value: string;
 }
 
 const handleUpdateRoom = (dataToUpdate: IRoomUpdate) =>{
@@ -42,7 +45,9 @@ export function DataTable<T extends Record<string, any>>({
   path,
   role,
   refreshData,
-  page = '1'
+  page = '1',
+  setValue,
+  value
 }: DataTableProps<T>) {
   const [dataRooms, setDataRooms] = useState<IRoomInterface[] | []>([])
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
@@ -75,6 +80,8 @@ export function DataTable<T extends Record<string, any>>({
   }
 
   
+
+  
   return (
     <div className="p-8 bg-white border-1 border-gray-300 rounded-md">
       <div className="flex items-center gap-2 mb-4 justify-between">
@@ -89,16 +96,30 @@ export function DataTable<T extends Record<string, any>>({
                 onFilter?.(e.target.value);
               }}
             /> */}
-            <input
+            {
+              user?.role === 'ADMIN' && (
+                <SearchComponent
+                  value={value}
+                  delay={1000}
+                  setValue={setValue}
+                  onSearch={onFilter}
+                  page={+page}
+                  limit={20}
+                  placeHolder='Filtre por nome'
+                  className='w-full outline-0'
+                />
+              )
+            }
+            {/* <input
               type="text"
               placeholder="Filtre por nome"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                onFilter?.(e.target.value);
+                // onFilter?.(e.target.value);
               }}
               className="border border-gray-300 p-2 rounded-md w-full outline-0"
-            />
+            /> */}
             <input
               type="date"
               value={date}

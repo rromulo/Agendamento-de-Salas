@@ -50,8 +50,8 @@ export function useAuth() {
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       if (err?.response?.data?.message) {
-      toastError(err.response.data.message);
-    } 
+        toastError(err.response.data.message);
+      } 
     }
   };
 

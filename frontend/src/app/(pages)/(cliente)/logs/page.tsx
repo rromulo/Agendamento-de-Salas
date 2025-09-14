@@ -41,6 +41,9 @@ function LogsAdmin() {
   return (
     <div className=''>
       <DataTable
+        onFilter={() => {}}
+        setValue={() => {}}
+        value=''
         data={logs}
         columns={[
           { key: "atividade", label: "Tipo de atividade",

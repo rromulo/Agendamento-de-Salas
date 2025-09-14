@@ -6,6 +6,7 @@ import { DataTable } from '@/components/table/DataTable';
 import { IUserProps } from '@/interfaces/cliente.interface';
 import {
   getAllUsers,
+  getUsersByName,
   setActivePermission,
   setSchedulingPermission,
   setViewLogsPermission,
@@ -19,11 +20,12 @@ function ClientesAdmin() {
   const [users, setUsers] = useState<IUserProps[] | []>([])
   const [page, setPage] = useState("1")
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [name, setName] = useState<string>('')
 
   const loadUsers = async (page: string) => {
     try {
       setLoading(true)
-      const usersData = await getAllUsers(+page, 20)
+      const usersData = await getUsersByName(+page, 20, name);
       setUsers(usersData.logs)
       setTotalPages(usersData.totalPages)
     } catch (error) {
@@ -53,6 +55,12 @@ function ClientesAdmin() {
     }
   }
 
+  const handleSearchUsers = async (name: string, page: number, limit: number = 20) => {
+    await getUsersByName(page, limit, name);
+    setName(name)
+    loadUsers("1")
+  }
+
   useEffect(() => {
     loadUsers(page)
   }, [])
@@ -72,6 +80,9 @@ function ClientesAdmin() {
   return (
     <div className=''>
       <DataTable
+        setValue={setName}
+        value={name}
+        onFilter={handleSearchUsers}
         data={users}
         columns={[
           { key: "date", label: "Data de cadastro",

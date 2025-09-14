@@ -75,7 +75,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
     const userData = {
       name: `${firstName} ${lastName}`,
       email,
-      ...(!isProfile && { password }), // Só inclui password se não for perfil
+      password,
       address: {
         cep: unmask(cep),
         estado: address?.estado || '',
@@ -138,7 +138,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
             label={<span><strong>E-mail</strong> (Obrigatório)</span>}
           />
 
-          {!isProfile && (
+          {/* {!isProfile && ( */}
             <Input
               type={'password'}
               placeHolder={'Senha'}
@@ -147,7 +147,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
               required
               label={<span><strong>Senha de acesso</strong> (Obrigatório)</span>}
             />
-          )}
+          {/* )} */}
 
           <Input
             type={'text'}

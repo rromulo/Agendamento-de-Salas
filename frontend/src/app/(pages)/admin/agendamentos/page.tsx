@@ -4,6 +4,7 @@ import { DataTable } from '@/components/table/DataTable';
 import { IBooking } from '@/interfaces/booking,interface';
 import { IRoomUpdate } from '@/interfaces/room.interface';
 import { getAllBookings, updateBooking } from '@/services/bookings';
+import { getUsersByName } from '@/services/users';
 import { useEffect, useState } from 'react';
 
 export default function AdminAgendamentos() {
@@ -51,10 +52,18 @@ export default function AdminAgendamentos() {
     );
   }
 
+  // const handleSearchUsers = async (name: string, page: number, limit: number = 20) => {
+  //   const response = await getUsersByName(name, page, limit);
+
+  // }
+
+
   return (
     <div className=''>
       <DataTable
-
+        onFilter={() => {}}
+        setValue={() => {}}
+        value=''
         path='agendamentos'
         role='ADMIN'
         data={bookings}

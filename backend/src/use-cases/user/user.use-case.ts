@@ -22,6 +22,11 @@ export class UserUseCase {
     return resp(200, response)
   }
 
+  async getUsersByName(page: number, limit: number,name: string): Promise<{status: number, message: unknown}> {
+    const response = await this.userRepository.getUsersByName(page, limit, name);
+    return resp(200, response)
+  }
+
   async getUserById(userId: string) {
     const response = await this.userRepository.findById(userId);
     return resp(200, response)

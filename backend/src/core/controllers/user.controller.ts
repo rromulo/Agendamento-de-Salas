@@ -31,6 +31,13 @@ export class UserController {
       res.status(400).json({error: error.message})      
     }
   }
+
+  async getUsersByName(req: Request, res: Response) {
+    const {name, page, limit} = req.params;
+    const { status, message } = await this.userUseCase.getUsersByName(+page, +limit, name);
+      res.status(status).json(message)
+  }
+
   async updateUser(req: Request, res: Response) {
       const data = req.body
       const {userId} = req.params

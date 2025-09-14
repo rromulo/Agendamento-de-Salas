@@ -5,7 +5,7 @@ import AddressModel from '../../infra/database/models/address.model';
 import UserModel from '../../infra/database/models/user.model';
 import ApiError from '../../utils/apiError';
 import sequelize from '../../infra/database/models'
-import { InferAttributes } from 'sequelize';
+import { InferAttributes, Op } from 'sequelize';
 import md5 from 'md5';
 
 export class UserRepository implements IUserRepository {
@@ -64,6 +64,45 @@ export class UserRepository implements IUserRepository {
     }
   }
 
+  async getUsersByName(page: number, limit: number = 20, name?: string): Promise<{
+    logs: IUserProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+    console.log('NAME NO BACKEND',name)
+    const offset = (page - 1) * limit;
+
+    const whereClause: any = {}
+
+    if(name && name.trim() !== '') {
+      whereClause.name = {
+        [Op.like]: `%${name}%`
+      }
+      whereClause.role = 'CLIENTE'
+    }
+
+    const { count, rows } = await UserModel.findAndCountAll(
+      {
+        where: whereClause,
+        include: [
+          {
+            model: AddressModel,
+            as: 'address'
+          }
+        ],
+        offset,
+        order: [['name', 'ASC']]
+      }      
+    );
+    return {
+      logs: rows.map(row => row.toJSON() as unknown as IUserProps),
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    }
+  }
+
   async findByEmail(email: string): Promise<Partial<IUserProps> | null> {
     const user = await UserModel.findOne({
       where: { email }
@@ -83,11 +122,18 @@ export class UserRepository implements IUserRepository {
   async updateWithAddress(id: string, dataUser: InferAttributes<UserModel>, dataAddress: IUpdateAddress): Promise<Partial<IUserProps>> {
     console.log('DATA USER DE NOVO ->', dataUser)
     return await sequelize.transaction(async (t) => {
-
+      const hashPassword = md5(dataUser.password)
       const existing = await UserModel.findByPk(id);
       if (!existing) throw new Error('Usuário não encontrado');
       
-      const user = await UserModel.update({ ...dataUser },{where: {id: existing.id}, transaction: t});
+      const user = await UserModel.update(
+        {
+          name: dataUser.name,
+          email: dataUser.email,
+          password: hashPassword,
+        },
+        {where: {id: existing.id}, transaction: t}
+      );
       const address = await AddressModel.update(
         { ...dataAddress },
         {
@@ -95,7 +141,7 @@ export class UserRepository implements IUserRepository {
           transaction: t
         },
       );
-      const newUser = await UserModel.findByPk(existing.id);
+      const newUser = await UserModel.findByPk(existing.id, { transaction: t });
       const [affectedRowsUSer] = user
       console.log('RETORNO AQUI BACK -->', affectedRowsUSer)
       return { ...newUser, address } as unknown as UserModel & { address: AddressModel };

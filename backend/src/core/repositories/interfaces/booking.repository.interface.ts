@@ -10,7 +10,7 @@ export interface IBookingRepository {
     totalPages: number;
     currentPage: number;
   }>
-  findAllByUserId(userId: string, page: number, limit: number): Promise<{
+  findAllByUserId(userId: string, page: number, limit: number, name?: string): Promise<{
     logs: IBookingProps[];
     totalItems: number;
     totalPages: number;

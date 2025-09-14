@@ -16,7 +16,7 @@ export default function AdminAgendamentos() {
   const [totalPages, setTotalPages] = useState<number>(1)
   const [name, setName] = useState<string>('')
 
-  const loadBookings = async (page: string) => {
+  const loadBookings = async (page: string, name?: string) => {
     try {
       setLoading(true)
       const bookingsData = await getAllBookings(+page, 20, name)
@@ -30,9 +30,7 @@ export default function AdminAgendamentos() {
   }
 
   const handleSearchBookings = async (name: string, page: number, limit: number = 20) => {
-    await getAllBookings(page, limit, name);
-    setName(name)
-    loadBookings('1')
+    loadBookings('1', name)
   }
 
   useEffect(() => {

@@ -21,9 +21,9 @@ export const getAllBookings = async (page: number, limit: number, name?: string)
   const response = await api.get(`/admin/bookings/${page}/${limit}/${name ?? ''}`)
   return response.data
 }
-export const getBookinsByUser = async (page: number, limit: number, currentPage?: number): Promise<{logs: IBooking[] ,page: number, totalPages: number}> => {
+export const getBookinsByUser = async (page: number, limit: number, name?: string): Promise<{logs: IBooking[] ,page: number, totalPages: number}> => {
   const me = await api.get('auth/me');
-  const response = await api.get(`/bookings/${me.data.user.id}/${currentPage ?? page}/${limit}`)
+  const response = await api.get(`/bookings/${me.data.user.id}/${page}/${limit}/${name ?? ''}`)
   return response.data
 }
 export const updateBooking = async (userId: string, bookingId: string, status: 'pendente' | 'confirmado' | 'recusado'): Promise<IBooking | undefined> => {

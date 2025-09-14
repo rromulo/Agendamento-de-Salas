@@ -73,12 +73,11 @@ function LogsAdmin() {
             },
           },
         ]}
-        // actions={undefined}
       />
       {
         logs && (
           <Pagination
-          pagination={{ currentPage: Number(page), totalPages: 0 }}
+          pagination={{ currentPage: Number(page), totalPages: totalPages ?? 0 }}
           handleOnClick={setPage}
           />
         )

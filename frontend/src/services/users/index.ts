@@ -4,6 +4,7 @@ import { toastError, toastSuccess } from '@/utils/toastify';
 import { useAuth } from '@/hooks/useAuth';
 import { ICreateAddress, IUpdateAddress } from '@/interfaces/address.interface';
 import { AxiosError } from 'axios';
+import { saveLog } from '../logs';
 
 
 export const getAllUsers = async (page: number, limit: number = 20, currentPage?: number): Promise<{logs: IUserProps[], page: number, totalPages: number}> => {
@@ -52,6 +53,11 @@ export const updateUser = async (userId: string, dataUser: Partial<IUserProps>) 
     const response = await api.patch(`/user/${userId}`, {...dataUser, address: dataUser.address})
     if(response.status === 200) {
       toastSuccess('Informações salvas com sucesso.')
+      saveLog({
+        userId,
+        action: 'Atualização de perfil',
+        description: 'Minha Conta'
+      })
     }
   } catch (error) {
     const err = error as AxiosError<{ message: string }>;

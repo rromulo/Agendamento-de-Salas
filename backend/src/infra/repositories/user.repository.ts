@@ -7,6 +7,7 @@ import ApiError from '../../utils/apiError';
 import sequelize from '../../infra/database/models'
 import { InferAttributes, Op } from 'sequelize';
 import md5 from 'md5';
+import LogModel from '../../infra/models/log.model';
 
 export class UserRepository implements IUserRepository {
 
@@ -141,6 +142,8 @@ export class UserRepository implements IUserRepository {
       );
       const newUser = await UserModel.findByPk(existing.id, { transaction: t });
       const [affectedRowsUSer] = user
+      // const respLog = await LogModel.create({userId: newUser?.id || '', action: 'Atualização de perfil', description: 'Minha conta'})
+      // console.log(respLog)
       return { ...newUser, address } as unknown as UserModel & { address: AddressModel };
     });
   }

@@ -4,21 +4,31 @@ import { ILogRepository } from '../../core/repositories/interfaces/log.repositor
 import UserModel from '../../infra/database/models/user.model';
 import ApiError from '../../utils/apiError';
 import AddressModel from '../../infra/database/models/address.model';
+import { Op } from 'sequelize';
 
 export class LogRepository implements ILogRepository {
   async saveLog(log: ICreateLog): Promise<ILogProps> {
     const logResponse =  await LogModel.create(log)
     return logResponse.toJSON() as ILogProps;
   }
-  async findAll(page: number, limit: number = 20): Promise<{
+  async findAll(page: number, limit: number = 20, term?: string): Promise<{
     logs: ILogProps[];
     totalItems: number;
     totalPages: number;
     currentPage: number;
   }> {
     const offset = (page - 1) * limit;
+
+    const whereClause = term ? {
+      [Op.or]: [
+        { action: { [Op.like]: `%${term}%` } },
+        { description: { [Op.like]: `%${term}%` } },
+        { '$user.name$': { [Op.like]: `%${term}%` } }
+      ]
+    } : {};
     
     const { count, rows } = await LogModel.findAndCountAll({
+      where: whereClause,
       limit,
       offset,
       order: [['createdAt', 'DESC']],
@@ -29,6 +39,7 @@ export class LogRepository implements ILogRepository {
           attributes: {
             exclude: ['password']
           },
+          required: false,
           include: [
             {
               model: AddressModel,
@@ -37,14 +48,14 @@ export class LogRepository implements ILogRepository {
           ]
         }
       ]
-    })
+    });
     
     return {
       logs: rows.map(row => row.toJSON() as ILogProps),
       totalItems: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page
-    }
+    };
   }
   async findAllByUser(userId: string, page: number, limit: number): Promise<{
     logs: ILogProps[];

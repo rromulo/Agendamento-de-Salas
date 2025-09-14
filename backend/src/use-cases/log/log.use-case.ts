@@ -11,8 +11,8 @@ export class LogUseCase {
     return resp(200, logs)
   }
 
-  async findAll(page: number, limit: number): Promise<{ status: number, message: unknown }> {
-    const logs =  await this.logRepository.findAll(page, limit);
+  async findAll(page: number, limit: number, term?: string): Promise<{ status: number, message: unknown }> {
+    const logs =  await this.logRepository.findAll(page, limit, term);
     return resp(200, logs)
   }
 

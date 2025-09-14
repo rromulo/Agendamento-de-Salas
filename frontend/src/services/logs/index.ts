@@ -3,8 +3,8 @@ import api from '@/app/api/axios';
 import { AxiosError } from 'axios';
 import { toastError } from '@/utils/toastify';
 
-export const getAllLogs = async (page: number, limit: number = 20, currentPage?: number): Promise<{logs: ILogProps[], page: number, totalPages: number}> => {
-  const response = await api.get(`/admin/log/${currentPage ?? page}/${limit}`)
+export const getAllLogs = async (page: number, limit: number = 20, term?: string): Promise<{logs: ILogProps[], page: number, totalPages: number}> => {
+  const response = await api.get(`/admin/log/${page}/${limit}/${term ?? ''}`)
   return response.data
 }
 

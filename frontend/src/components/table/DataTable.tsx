@@ -8,6 +8,7 @@ import { ScheduleModal } from '../forms/modal-form/ModalSchedule';
 import { useAuth } from '@/app/context/authContext';
 import { saveBooking, getBookinsByUser } from '@/services/bookings';
 import { ICreateBooking } from '@/interfaces/booking,interface';
+import Input from '../input/Input';
 
 interface Column<T> {
   key: keyof T | string;
@@ -45,16 +46,15 @@ export function DataTable<T extends Record<string, any>>({
 }: DataTableProps<T>) {
   const [dataRooms, setDataRooms] = useState<IRoomInterface[] | []>([])
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [search, setSearch] = useState("");
   const {authState: { user }} = useAuth()
   const getRooms = async () => {
     try {
-      console.log('GET ALL ROOMS CHAMADO')
       const response = await getAllRooms()
       if (response) {
         setDataRooms(response)
       }
     } catch (error) {
-      console.log('ERRO AO CHAMAR TODAS AS SALAS');
       return [];
     }
   }
@@ -74,11 +74,21 @@ export function DataTable<T extends Record<string, any>>({
     }
   }
 
-  const [search, setSearch] = useState("");
+  
   return (
     <div className="p-8 bg-white border-1 border-gray-300 rounded-md">
       <div className="flex items-center gap-2 mb-4 justify-between">
         <div className='flex items-center gap-2 w-2/3'>
+            {/* <Input
+              type={'text'}
+              placeHolder={'Filtre por nome'}
+              value={search}
+              label={undefined}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                onFilter?.(e.target.value);
+              }}
+            /> */}
             <input
               type="text"
               placeholder="Filtre por nome"
@@ -143,8 +153,9 @@ export function DataTable<T extends Record<string, any>>({
                 </td>
               </tr>
             )}
-            {data.map((row, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
+            {data.map((row, idx) => {
+              return (
+              <tr key={idx} className={`${row.status === 'confirmado' ? 'bg-[#F2FFFD]' : row.status === 'recusado' ? 'bg-[#FFF3F3]' : ''}`}>
                 {columns.map((col) => (
                   <td key={col.key as string} className={`border-t border-gray-300 py-6 h-[20px]`}>
                     {col.render ? col.render(row) : row[col.key]}
@@ -152,16 +163,10 @@ export function DataTable<T extends Record<string, any>>({
                 ))}
                 {actions && <td className="border-t border-gray-300 p-2">{actions(row)}</td>}
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
       </div>
-      {/* Paginação (simples de exemplo) */}
-      {/* <div className="flex justify-center mt-4 gap-2">
-        <button className="px-3 py-1 border rounded">1</button>
-        <button className="px-3 py-1 border rounded">2</button>
-        <button className="px-3 py-1 border rounded">3</button>
-      </div> */}
     </div>
   );
 }

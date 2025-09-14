@@ -8,12 +8,12 @@ export const getAllLogs = async (page: number, limit: number = 20, term?: string
   return response.data
 }
 
-export const getAllLogsByUser = async (page: number, limit: number = 20, currentPage?: number): Promise<{logs: ILogProps[], page: number, totalPages: number} | undefined> => {
+export const getAllLogsByUser = async (page: number, limit: number = 20, term?: string): Promise<{logs: ILogProps[], page: number, totalPages: number} | undefined> => {
   try {
     
     const me = await api.get(`/auth/me`);
   
-    const response = await api.get(`/log/${me.data.user.id}/${currentPage ?? page}/${limit}`)
+    const response = await api.get(`/log/${me.data.user.id}/${page}/${limit}/${term ?? ''}`)
     return response.data
   } catch (error) {
     const err = error as AxiosError<{ message: string }>;

@@ -10,11 +10,12 @@ function LogsAdmin() {
   const[loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState("1")
   const [totalPages, setTotalPages] = useState<number>(1)
+  const [term, setTerm] = useState<string>('')
 
-  const loadLogs = async (page: string) => {
+  const loadLogs = async (page: string, term?: string) => {
     try {
       setLoading(true)
-      const logsData = await getAllLogs(+page, 20)
+      const logsData = await getAllLogs(+page, 20, term)
       setLogs(logsData.logs)
       setTotalPages(logsData.totalPages)
     } catch (error) {
@@ -30,6 +31,11 @@ function LogsAdmin() {
     loadLogs(page)
   }, [page])
 
+  const handleSearchLogs = async (name: string, page: number, limit: number = 20) => {
+    loadLogs("1", name)
+    setTerm(name)
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -41,9 +47,9 @@ function LogsAdmin() {
   return (
     <div className=''>
       <DataTable
-        onFilter={() => {}}
-        setValue={() => {}}
-        value=''
+        onFilter={handleSearchLogs}
+        setValue={setTerm}
+        value={term}
         data={logs}
         columns={[
           { key: "cliente", label: "Cliente",

@@ -11,7 +11,8 @@ export class LogController {
 
   async findAllControl(req: Request, res: Response, next: NextFunction) {
     const {page, limit} = req.params
-    const { status, message } = await this.logUseCase.findAll(+page, +limit);
+    const term = req.params.term || (req.query.term as string);
+    const { status, message } = await this.logUseCase.findAll(+page, +limit, term);
     res.status(status).json(message)
   }
 

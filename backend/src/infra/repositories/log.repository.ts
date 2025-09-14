@@ -57,7 +57,7 @@ export class LogRepository implements ILogRepository {
       currentPage: page
     };
   }
-  async findAllByUser(userId: string, page: number, limit: number): Promise<{
+  async findAllByUser(userId: string, page: number, limit: number, term?: string): Promise<{
     logs: ILogProps[];
     totalItems: number;
     totalPages: number;
@@ -68,9 +68,22 @@ export class LogRepository implements ILogRepository {
     if(!user?.canViewLogs) throw new ApiError(401, 'Você não ter permissão para ver logs.')
 
     const offset = (page - 1) * limit;
-    
+
+    const whereClause: any = {
+      userId,
+    };
+
+    if (term) {
+      whereClause[Op.and] = {
+        [Op.or]: [
+          { action: { [Op.like]: `%${term}%` } },
+          { description: { [Op.like]: `%${term}%` } }
+        ]
+      };
+    }
+   
     const { count, rows } = await LogModel.findAndCountAll({
-      where: { userId },
+      where: whereClause,
       limit,
       offset,
       order: [['createdAt', 'DESC']],

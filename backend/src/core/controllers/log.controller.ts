@@ -18,7 +18,8 @@ export class LogController {
 
   async findAllByUserControl(req: Request, res: Response, next: NextFunction) {
     const {userId, page, limit} = req.params
-    const { status, message } = await this.logUseCase.findAllByUserControl(userId, +page, +limit);
+    const term = req.params.term || (req.query.term as string);
+    const { status, message } = await this.logUseCase.findAllByUserControl(userId, +page, +limit, term);
     res.status(status).json(message)
   }
 }

@@ -14,6 +14,7 @@ const logController = new LogController(logUseCase);
 logRouter.post('/log', logController.saveLogControl.bind(logController))
 logRouter.get('/admin/log/:page/:limit', verifyToken, authorizeAdmin,logController.findAllControl.bind(logController))
 logRouter.get('/admin/log/:page/:limit/:term', verifyToken, authorizeAdmin,logController.findAllControl.bind(logController))
-logRouter.get('/log/:userId/:page/:limit', logController.findAllByUserControl.bind(logController))
+logRouter.get('/log/:userId/:page/:limit', verifyToken,logController.findAllByUserControl.bind(logController))
+logRouter.get('/log/:userId/:page/:limit/:term', verifyToken,logController.findAllByUserControl.bind(logController))
 
 export default logRouter;

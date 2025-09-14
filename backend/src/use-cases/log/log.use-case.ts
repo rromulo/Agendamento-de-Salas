@@ -16,8 +16,8 @@ export class LogUseCase {
     return resp(200, logs)
   }
 
-  async findAllByUserControl(userId: string, page: number, limit: number): Promise<{ status: number, message: unknown }> {
-    const logs =  await this.logRepository.findAllByUser(userId, page, limit);
+  async findAllByUserControl(userId: string, page: number, limit: number, term?: string): Promise<{ status: number, message: unknown }> {
+    const logs =  await this.logRepository.findAllByUser(userId, page, limit, term);
     return resp(200, logs)
   }
 }

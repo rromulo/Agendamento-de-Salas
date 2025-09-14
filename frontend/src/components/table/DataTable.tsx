@@ -6,9 +6,8 @@ import { IRoomInterface, IRoomUpdate } from '@/interfaces/room.interface';
 import { getAllRooms, updateRoom } from '@/services/room';
 import { ScheduleModal } from '../forms/modal-form/ModalSchedule';
 import { useAuth } from '@/app/context/authContext';
-import { saveBooking, getBookinsByUser } from '@/services/bookings';
+import { saveBooking } from '@/services/bookings';
 import { ICreateBooking } from '@/interfaces/booking,interface';
-import Input from '../input/Input';
 import { SearchComponent } from '../input/SearchComponent';
 import { usePathname } from 'next/navigation';
 

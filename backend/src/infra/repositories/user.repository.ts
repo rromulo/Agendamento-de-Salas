@@ -1,5 +1,5 @@
 import { ICreateAddress } from '../../core/entities/address.entity';
-import { ICreateUser, IUserProps, User } from "../../core/entities/user.entity";
+import { IAddress, ICreateUser, IUpdateAddress, IUserProps, User } from "../../core/entities/user.entity";
 import { IUserRepository } from '../../core/repositories/interfaces/user.repository.interface'
 import AddressModel from '../../infra/database/models/address.model';
 import UserModel from '../../infra/database/models/user.model';
@@ -11,6 +11,13 @@ import md5 from 'md5';
 export class UserRepository implements IUserRepository {
 
   async save(userData: ICreateUser, addresData: ICreateAddress): Promise<UserModel & { address: AddressModel }> {
+
+    const exists = await UserModel.findOne({
+      where: { email: userData.email }
+    })
+
+    if(exists) throw new ApiError(409, 'E-nmail já existe no sistema.') 
+
     return await sequelize.transaction(async (t) => {
       const hashPassword = md5(userData.password)
       const user = await UserModel.create({...userData, password: hashPassword, role: 'CLIENTE'}, { transaction: t });
@@ -24,20 +31,37 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async findAll(): Promise<Partial<IUserProps>[]> {
-    const data = await UserModel.findAll({
-      attributes: {exclude: ['password']},
+  async findAll(page: number, limit: number = 20): Promise<{
+    logs: IUserProps[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  }> {
+
+    const offset = (page - 1) * limit;
+    
+    const { count, rows } = await UserModel.findAndCountAll({
+      where: {role: 'CLIENTE'},
+      limit,
+      offset,
+      order: [['name', 'DESC']],
       include: [
         {
           model: AddressModel,
           as: 'address',
-          attributes:{
-            exclude: ['userId', 'id']
-          }
-        }
-      ]
-    });
-    return data
+        },
+      ],
+      attributes: {
+        exclude: ['password']
+      },
+    })
+    console.log(count, rows)
+    return {
+      logs: rows.map(row => row.toJSON() as unknown as IUserProps),
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page
+    }
   }
 
   async findByEmail(email: string): Promise<Partial<IUserProps> | null> {
@@ -56,6 +80,28 @@ export class UserRepository implements IUserRepository {
     return new User(existing.toJSON()).getPublicProfile();
   }
 
+  async updateWithAddress(id: string, dataUser: InferAttributes<UserModel>, dataAddress: IUpdateAddress): Promise<Partial<IUserProps>> {
+    console.log('DATA USER DE NOVO ->', dataUser)
+    return await sequelize.transaction(async (t) => {
+
+      const existing = await UserModel.findByPk(id);
+      if (!existing) throw new Error('Usuário não encontrado');
+      
+      const user = await UserModel.update({ ...dataUser },{where: {id: existing.id}, transaction: t});
+      const address = await AddressModel.update(
+        { ...dataAddress },
+        {
+          where: {userId: existing.id},
+          transaction: t
+        },
+      );
+      const newUser = await UserModel.findByPk(existing.id);
+      const [affectedRowsUSer] = user
+      console.log('RETORNO AQUI BACK -->', affectedRowsUSer)
+      return { ...newUser, address } as unknown as UserModel & { address: AddressModel };
+    });
+  }
+
   async delete(id: string): Promise<boolean> {
     const deleted = await UserModel.destroy({ where: { id } });
     if (!deleted) throw new Error('User not found');
@@ -64,7 +110,14 @@ export class UserRepository implements IUserRepository {
   }
 
   async findById(id: string): Promise<User | null> {
-    const data = await UserModel.findByPk(id);
+    const data = await UserModel.findByPk(id, {
+      include: [
+        {
+          model: AddressModel,
+          as: 'address'
+        }
+      ]
+    });
     if (!data) return null;
 
     return new User(data.toJSON());

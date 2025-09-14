@@ -9,14 +9,15 @@ export class BookingController {
     res.status(status).json(message)
   }
 
-  async listAllBookings(_req: Request, res: Response, next: NextFunction) {
-    const {status, message} = await this.bookingUseCase.listAllBookings()
+  async listAllBookings(req: Request, res: Response, next: NextFunction) {
+    const {page, limit} = req.params
+    const {status, message} = await this.bookingUseCase.listAllBookings(+page, +limit)
     res.status(status).json(message)
   }
 
   async findAllByUserId(req: Request, res: Response, next: NextFunction) {
-    const userId = res.locals.user.data.id
-    const {status, message} = await this.bookingUseCase.findAllByUserId(userId)
+    const {userId, page, limit} = req.params;
+    const {status, message} = await this.bookingUseCase.findAllByUserId(userId,+page,+limit)
     res.status(status).json(message)
   }
 

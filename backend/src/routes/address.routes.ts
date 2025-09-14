@@ -11,6 +11,6 @@ const addressUseCase = new AddressUseCase(addressRepository);
 const addressController = new AddressController(addressUseCase);
 
 addressRouter.post('/address', verifyToken,addressController.saveAddres.bind(addressController))
-addressRouter.get('/address', verifyToken,addressController.getAddresViaCepApi.bind(addressController))
+addressRouter.get('/address/:cep', addressController.getAddresViaCepApi.bind(addressController))
 
 export default addressRouter;

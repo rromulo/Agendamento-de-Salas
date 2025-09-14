@@ -10,7 +10,7 @@ export class AddressController {
   }
 
   async getAddresViaCepApi(req: Request, res: Response, next: NextFunction) {
-      const { cep } = req.body
+      const { cep } = req.params
       const { status, message } = await this.addresshUseCase.getAddressViaCepApi(cep);
       res.status(status).json(message)
   }

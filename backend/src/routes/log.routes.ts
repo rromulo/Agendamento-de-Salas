@@ -10,7 +10,7 @@ const logUseCase = new LogUseCase(logRepository);
 const logController = new LogController(logUseCase);
 
 logRouter.post('/log', logController.saveLogControl.bind(logController))
-logRouter.get('/admin/log', logController.findAllControl.bind(logController))
-logRouter.get('/log', logController.findAllByUserControl.bind(logController))
+logRouter.get('/admin/log/:page/:limit', logController.findAllControl.bind(logController))
+logRouter.get('/log/:userId/:page/:limit', logController.findAllByUserControl.bind(logController))
 
 export default logRouter;

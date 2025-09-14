@@ -9,7 +9,7 @@ import UserModel from '../../infra/database/models/user.model';
 import RoomModel from '../../infra/database/models/room.model';
 import LogModel from '../../infra/database/models/log.model';
 import { LogRepository } from './log.repository';
-import { InferAttributes, where } from 'sequelize';
+import { InferAttributes, Op, where } from 'sequelize';
 import { getStatusUpdateBooking } from '../../utils/getStatusUpdateBooking';
 
 export class BookingRepository implements IBookingRepository {
@@ -53,7 +53,7 @@ export class BookingRepository implements IBookingRepository {
     return new Booking(response.toJSON()).getPublicBooking();
 
   }
-  async findAll(page: number, limit: number = 20): Promise<{
+  async findAll(page: number, limit: number = 20, name?: string): Promise<{
     logs: IBookingProps[];
     totalItems: number;
     totalPages: number;
@@ -61,6 +61,14 @@ export class BookingRepository implements IBookingRepository {
   }> {
 
     const offset = (page - 1) * limit;
+    const whereClause: any = {}
+
+    if(name && name.trim() !== '') {
+      whereClause.name = {
+        [Op.like]: `%${name}%`,
+      },
+      whereClause.role = "CLIENTE"
+    }
     
     const { count, rows } = await BookingModel.findAndCountAll({
       limit,
@@ -70,18 +78,15 @@ export class BookingRepository implements IBookingRepository {
         {
           model: UserModel,
           as: 'user',
-          attributes: {exclude: ['email', 'password']}
+          attributes: {exclude: ['email', 'password']},
+          where: whereClause
         },
         {
           model: RoomModel,
           as: 'room'
         }
       ],
-      attributes: {
-        exclude: ['roomId', 'userId']
-      },
     })
-    console.log(count, rows)
     return {
       logs: rows.map(row => row.toJSON() as unknown as IBookingProps),
       totalItems: count,
@@ -118,7 +123,6 @@ export class BookingRepository implements IBookingRepository {
         exclude: ['roomId', 'userId']
       },
     })
-    console.log(count, rows)
     return {
       logs: rows.map(row => row.toJSON() as unknown as IBookingProps),
       totalItems: count,

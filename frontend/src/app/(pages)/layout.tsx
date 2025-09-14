@@ -18,9 +18,6 @@ import { useAuth } from '../context/authContext';
 import { FaPeopleGroup } from 'react-icons/fa6';
 import { IoPersonOutline } from 'react-icons/io5';
 import { PiListChecksBold } from 'react-icons/pi';
-import Cookies from 'js-cookie';
-import { TbLogout2 } from 'react-icons/tb';
-
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -28,8 +25,8 @@ function classNames(...classes: string[]) {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [tittlePage, setTittlePage] = useState('Agendamentos')
-  const { authState, login, logout, userData } = useAuth();
-  const { allowedRoutes, error, loading, titlePage, user } = authState
+  const { authState, logout, userData } = useAuth();
+  const { allowedRoutes, error, loading, user } = authState
   
   const subtitleRoles: Record<string, Record<string, string>> = {
     admin: {
@@ -54,13 +51,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     FaCalendar,
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen">
-  //       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   
 

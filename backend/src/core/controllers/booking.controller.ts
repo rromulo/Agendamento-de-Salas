@@ -11,7 +11,8 @@ export class BookingController {
 
   async listAllBookings(req: Request, res: Response, next: NextFunction) {
     const {page, limit} = req.params
-    const {status, message} = await this.bookingUseCase.listAllBookings(+page, +limit)
+    const name = req.params.name || (req.query.name as string);
+    const {status, message} = await this.bookingUseCase.listAllBookings(+page, +limit, name)
     res.status(status).json(message)
   }
 

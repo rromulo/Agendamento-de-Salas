@@ -1,4 +1,4 @@
-import { ICreateRoom, IRoomInterface } from '@/interfaces/room.interface';
+import { ICreateRoom, IRoomInterface, IRoomUpdate } from '@/interfaces/room.interface';
 import api from '@/app/api/axios';
 import { toastError, toastSuccess } from '@/utils/toastify';
 import { AxiosError } from 'axios';
@@ -15,10 +15,10 @@ export const saveRoom = async (room: ICreateRoom): Promise<void> => {
     } 
   }
 }
-export const updateRoom = async (id: string, room: ICreateRoom): Promise<void> => {
+export const updateRoom = async (id: string, room: IRoomUpdate): Promise<void> => {
   try {
     
-    await api.patch(`/admin/rooms/${id}`, {name: room.name, openTime: room.openTime, closeTime: room.closeTime, scheduleBlock: room.scheduleBlock})
+    await api.patch(`/admin/rooms/${id}`, {name: room.name, openTime: room.openTime, closeTime: room.closeTime})
     toastSuccess('Sala atualizada com sucesso!')
     await getAllRooms()
   } catch (error) {

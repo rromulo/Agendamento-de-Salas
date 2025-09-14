@@ -32,7 +32,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
   const [cep, setCep] = useState(initialData?.cep || "");
   const [address, setAddress] = useState<IAddress | null>(initialData?.address || null);
   const [loading, setLoading] = useState(false);
-  const pattern = ['99-999.999']
+  const pattern = ['99999-999']
   const { login } = useAuth()
   console.log('INITIAL DATA NO FORM --->', initialData)
 
@@ -95,7 +95,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
   }
 
   useEffect(() => {
-    if (cep.length >= 10) {
+    if (cep.length >= 9) {
       handleCepBlur();
     }
   }, [cep]);

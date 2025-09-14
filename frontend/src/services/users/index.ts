@@ -3,6 +3,7 @@ import api from '@/app/api/axios';
 import { toastError, toastSuccess } from '@/utils/toastify';
 import { useAuth } from '@/hooks/useAuth';
 import { ICreateAddress, IUpdateAddress } from '@/interfaces/address.interface';
+import { AxiosError } from 'axios';
 
 
 //!! SERVICES DO USUÁRIO
@@ -24,9 +25,10 @@ export const saveUser = async (userData: ICreateUser, login: (credentials: { ema
         await login({email: userData.email, password: userData.password})
       }, 3000)
     }
-  } catch (error: any) {
-    if (error?.response?.data?.message) {
-      toastError(error.response.data.message);
+  } catch (error) {
+    const err = error as AxiosError<{ message: string }>;
+    if (err?.response?.data?.message) {
+      toastError(err.response.data.message);
     } 
   }
 }
@@ -45,12 +47,11 @@ export const updateUser = async (userId: string, dataUser: Partial<IUserProps>) 
     if(response.status === 200) {
       toastSuccess('Informações salvas com sucesso.')
     }
-  } catch (error: any) {
-    if(error && error.response) {
-      toastError(error.response.data.message)
-    } else {
-      toastError('Ocorreu um erro inesperado ao tentar atualizar as informações')
-    }
+  } catch (error) {
+    const err = error as AxiosError<{ message: string }>;
+    if (err?.response?.data?.message) {
+      toastError(err.response.data.message);
+    } 
   }
 }
 

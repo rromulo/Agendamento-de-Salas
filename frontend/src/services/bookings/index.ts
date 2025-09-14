@@ -1,16 +1,18 @@
 import { IBooking, ICreateBooking } from '@/interfaces/booking,interface';
 import api from '@/app/api/axios';
 import { toastError, toastSuccess } from '@/utils/toastify';
+import { AxiosError } from 'axios';
 
 
 export const saveBooking = async (dataBooking: ICreateBooking) => {
   try {
     const response = await api.post('/bookings', dataBooking)
     toastSuccess('Agendamento realizado.')
-  } catch (error: any) {
-    if(error && error?.response) {
-      toastError(error?.response?.data?.message)
-    }
+  } catch (error) {
+    const err = error as AxiosError<{ message: string }>;
+    if (err?.response?.data?.message) {
+      toastError(err.response.data.message);
+    } 
   }
   
 }

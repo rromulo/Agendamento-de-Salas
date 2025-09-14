@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     cliente: {
       agendamentos: 'Acompanhe todos os seus agendamentos de forma simples',
       logs: 'Acompanhe todas as suas Logs',
-      ['minha-conta']: 'Ajuste informações da sua conta de forma simples'
+      ['minha conta']: 'Ajuste informações da sua conta de forma simples'
     }
   }
 
@@ -100,7 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
               <div className="flex h-16 shrink-0 items-center">
-                <h1 className="text-white text-xl font-semibold">GUANA CELL</h1>
+                <h1 className="text-white text-xl font-semibold"></h1>
               </div>
               <nav className="flex flex-1 flex-col">
                 <ul className="flex flex-1 flex-col gap-y-7">
@@ -183,11 +183,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {user && (
               <Menu as="div" className="relative border-t p-4 border-gray-300">
                 <MenuButton className="-m-1.5 flex items-center justify-between p-1.5 w-full">
-                  <div className="">
-                    <span className="block text-black font-medium">
+                  <div className="flex flex-row justify-start flex-wrap">
+                    <span className="block text-black font-medium w-full text-left">
                       {user.name.split(' ')[0]}
                     </span>
-                    <span className="text-xs font-normal text-gray-900">
+                    <span className="text-xs font-normal text-gray-900 text-left">
                       {user.role}
                     </span>
                   </div>
@@ -195,16 +195,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <FaChevronDown className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                   </span>
                 </MenuButton>
-                <MenuItems className="absolute right-0 z-10 -mt-30.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                  <MenuItem>
-                    <button
-                      onClick={() => window.location.href = '/profile'}
-                      className="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50 w-full text-left"
-                    >
-                      Meu perfil
-                    </button>
-                  </MenuItem>
-                  <MenuItem>
+                <MenuItems className="absolute right-0 z-10 -mt-20.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                   <MenuItem>
                     <button
                       onClick={() => {
                         const dataLog = {
@@ -255,6 +247,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <main className="py-10">
           <div className="px-4 sm:px-6 lg:px-8">
+            {loading && (
+              <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+              </div>
+            )}
             {children}
           </div>
         </main>

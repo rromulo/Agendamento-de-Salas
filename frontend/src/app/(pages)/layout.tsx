@@ -23,7 +23,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [tittlePage, setTittlePage] = useState('Agendamentos')
   const { authState, logout, userData } = useAuth();
   const { allowedRoutes, error, loading, user } = authState

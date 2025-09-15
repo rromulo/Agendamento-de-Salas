@@ -39,7 +39,7 @@ export class LogRepository implements ILogRepository {
           attributes: {
             exclude: ['password']
           },
-          required: false,
+          where: {role: 'CLIENTE'},
           include: [
             {
               model: AddressModel,

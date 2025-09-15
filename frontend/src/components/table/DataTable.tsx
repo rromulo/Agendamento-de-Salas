@@ -161,12 +161,12 @@ export function DataTable<T extends Record<string, any>>({
                 </td>
               </tr>
             )}
-            {data.map((row, idx) => {
+            {data?.map((row, idx) => {
               return (
               <tr key={idx} className={`${row.status === 'confirmado' ? 'bg-[#F2FFFD]' : row.status === 'recusado' ? 'bg-[#FFF3F3]' : ''}`}>
                 {columns.map((col) => (
                   <td key={col.key as string} className={`border-t border-gray-300 py-6 h-[20px]`}>
-                    {col.render ? col.render(row) : row[col.key]}
+                    {col?.render ? col?.render(row) : row[col?.key]}
                   </td>
                 ))}
                 {actions && <td className="border-t border-gray-300 p-2">{actions(row)}</td>}

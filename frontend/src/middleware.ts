@@ -6,11 +6,30 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
   const path = request.nextUrl.pathname;
-  if (path === '/admin/login') {
-    return NextResponse.next();
+
+  const publicRoutes = ['/admin/login', '/login', '/cadastro'];
+
+  if (token && publicRoutes.includes(path)) {
+    try {
+      const response = await fetch(`${API_URL}/auth/me`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const { user } = await response.json();
+        const redirectPath = user.role === 'ADMIN' ? '/admin/agendamentos' : '/agendamentos';
+        return NextResponse.redirect(new URL(redirectPath, request.url));
+      }
+    } catch (error) {
+      console.error('Erro ao verificar o token:', error);
+    }
   }
 
-  if (!token) {
+  if (!token && !publicRoutes.includes(path)) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
@@ -54,5 +73,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/:path*'],
 };

@@ -1,6 +1,5 @@
 # 🏢 Teste Técnico: Agendamento de Salas
-
-Este projeto foi desenvolvido como um teste técnico para a vaga de **Desenvolvedor Pleno Full Stack na Goold**.  
+ 
 O sistema é uma plataforma de agendamento de salas, com dois perfis de usuário:
 
 - **Admin**

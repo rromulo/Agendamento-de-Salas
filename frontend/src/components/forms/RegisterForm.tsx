@@ -157,7 +157,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
               <button
                 type="button"
                 onClick={togglePassword}
-                className="absolute inset-y-13 right-0 pr-3 flex items-center text-sm leading-5 text-[40px]"
+                className="absolute inset-y-13 right-0 pr-3 flex items-center text-sm leading-5 text-[25px]"
               >
                 {showPassword ? (<FaEyeSlash/>) : <FaEye />}
               </button>

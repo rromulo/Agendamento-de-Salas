@@ -6,6 +6,7 @@ import { saveUser } from '@/services/users';
 import { IAddress, ICreateUser, IUserProps } from '@/interfaces/cliente.interface';
 import { ICreateAddress, IUpdateAddress } from '@/interfaces/address.interface';
 import { useAuth } from '@/hooks/useAuth';
+import { FaEye, FaEyeSlash, FaRegEye } from 'react-icons/fa';
 
 interface RegisterFormProps {
   isProfile?: boolean;
@@ -32,6 +33,7 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
   const [cep, setCep] = useState(initialData?.cep || "");
   const [address, setAddress] = useState<IAddress | null>(initialData?.address || null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const pattern = ['99999-999']
   const { login } = useAuth()
 
@@ -93,6 +95,10 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
     }
   }
 
+  const togglePassword = () => {
+    setShowPassword(!showPassword)
+  }
+
   useEffect(() => {
     if (cep.length >= 9) {
       handleCepBlur();
@@ -138,14 +144,24 @@ export default function RegisterForm({ isProfile = false, initialData, onSubmit 
           />
 
           {!isProfile && (
-            <Input
-              type={'password'}
-              placeHolder={'Senha'}
-              onChange={handleInput(setPassword)}
-              value={password}
-              required
-              label={<span><strong>Senha de acesso</strong> (Obrigatório)</span>}
-            />
+            
+            <div className="relative">
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                placeHolder={'Senha'}
+                onChange={handleInput(setPassword)}
+                value={password}
+                required
+                label={<span><strong>Senha de acesso</strong> (Obrigatório)</span>}
+              />
+              <button
+                type="button"
+                onClick={togglePassword}
+                className="absolute inset-y-13 right-0 pr-3 flex items-center text-sm leading-5 text-[40px]"
+              >
+                {showPassword ? (<FaEyeSlash/>) : <FaEye />}
+              </button>
+            </div>
           )}
 
           <Input

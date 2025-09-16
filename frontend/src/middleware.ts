@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
-// API_URL definida aqui...
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;

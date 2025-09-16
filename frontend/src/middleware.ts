@@ -2,14 +2,18 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:3001';
+// API_URL definida aqui...
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
   const path = request.nextUrl.pathname;
 
-  const publicRoutes = ['/admin/login', '/login', '/cadastro'];
+  const publicRoutes = ['/login', '/cadastro'];
+  const adminPublicRoutes = ['/admin/login'];
+  const isPublicRoute = publicRoutes.includes(path) || adminPublicRoutes.includes(path);
 
-  if (token && publicRoutes.includes(path)) {
+  let user = null;
+  if (token) {
     try {
       const response = await fetch(`${API_URL}/auth/me`, {
         method: 'GET',
@@ -20,58 +24,42 @@ export async function middleware(request: NextRequest) {
       });
 
       if (response.ok) {
-        const { user } = await response.json();
-        const redirectPath = user.role === 'ADMIN' ? '/admin/agendamentos' : '/agendamentos';
-        return NextResponse.redirect(new URL(redirectPath, request.url));
+        const data = await response.json();
+        user = data.user;
       }
     } catch (error) {
-      console.error('Erro ao verificar o token:', error);
+      console.error('Erro ao validar o token:', error);
     }
   }
 
-  if (!token && !publicRoutes.includes(path)) {
+  if (user && isPublicRoute) {
+    const redirectPath = user.role === 'ADMIN' ? '/admin/agendamentos' : '/agendamentos';
+    return NextResponse.redirect(new URL(redirectPath, request.url));
+  }
+
+  if (!user && !isPublicRoute) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
+  
+  if (user) {
+      const headers = new Headers(request.headers);
+      headers.set('x-user-role', user.role);
 
-  try {
-    const response = await fetch(`${API_URL}/auth/me`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${token}`,
-      },
-    });
-    
-    if (!response.ok) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-    
-    const { user, allowedRoutes } = await response.json();
-    
-    if (path.startsWith('/admin') && path !== '/admin/login') {
-      if (user.role !== 'ADMIN') {
-        const redirectPath =
-          user.role === 'CLIENTE'
-            ? '/agendamentos'
-            : '/login';
-
+      if (path.startsWith('/admin') && user.role !== 'ADMIN') {
+        const redirectPath = user.role === 'CLIENTE' ? '/agendamentos' : '/login';
         return NextResponse.redirect(new URL(redirectPath, request.url));
       }
-    }
-
-    const headers = new Headers(request.headers);
-    headers.set('x-user-role', user.role);
-    headers.set('x-user-data', JSON.stringify({ user, allowedRoutes }));
-
-    return NextResponse.next({
-      request: { headers },
-    });
-  } catch (error) {
-    console.error('Erro no middleware:', error);
-    return NextResponse.redirect(new URL('/login', request.url));
+      
+      return NextResponse.next({
+          request: { headers }
+      });
   }
+  
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/:path*'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],  
 };

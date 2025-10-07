@@ -1,4 +1,4 @@
-# 🏢 Teste Técnico: Agendamento de Salas
+Agendamento de Salas
  
 O sistema é uma plataforma de agendamento de salas, com dois perfis de usuário:
 
